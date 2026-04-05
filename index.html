@@ -174,7 +174,7 @@
     @keyframes fadeup{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
     /* ═══════════════════════════════════════════
-       SKILLS — FIXED PADDING & SCROLL
+       SKILLS — uniform card sizing
     ═══════════════════════════════════════════ */
     #skills-section{
       padding: clamp(var(--space-8),5vw,var(--space-16)) clamp(var(--space-6),4vw,var(--space-12));
@@ -199,16 +199,16 @@
     .skills-tab:hover{border-color:oklch(from var(--color-primary) l c h/0.4);color:var(--color-primary);}
     .skills-tab.active{background:var(--color-primary-highlight);border-color:oklch(from var(--color-primary) l c h/0.5);color:var(--color-primary);}
 
-    /* Bento grid */
+    /* Bento grid — all 5 cards equal width */
     .skills-bento{
       display:grid;
-      grid-template-columns:repeat(6,1fr);
+      grid-template-columns:repeat(5,1fr);
       gap:var(--space-3);
     }
-    @media(max-width:1280px){.skills-bento{grid-template-columns:repeat(4,1fr);}}
-    @media(max-width:900px){.skills-bento{grid-template-columns:repeat(3,1fr);}}
-    @media(max-width:640px){.skills-bento{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:400px){.skills-bento{grid-template-columns:1fr;}}
+    @media(max-width:1280px){.skills-bento{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:900px){.skills-bento{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:480px){.skills-bento{grid-template-columns:1fr;}}
+
     .skill-card{
       background:var(--color-surface);
       border:1px solid oklch(from var(--color-text) l c h/0.08);
@@ -231,10 +231,6 @@
       transform:translateY(-3px);
       background:color-mix(in oklch,var(--color-primary) 3%,var(--color-surface));
     }
-    .skill-card.featured{grid-column:span 3;}
-    @media(max-width:900px){.skill-card.featured{grid-column:span 2;}}
-    @media(max-width:640px){.skill-card.featured{grid-column:span 2;}}
-    @media(max-width:400px){.skill-card.featured{grid-column:span 1;}}
     .skill-card-icon{
       width:36px;height:36px;border-radius:var(--radius-md);
       background:var(--color-primary-highlight);
@@ -517,7 +513,7 @@
 
       <div class="skills-bento" id="skillsBento">
 
-        <div class="skill-card featured" data-cat="ml">
+        <div class="skill-card" data-cat="ml">
           <div style="display:flex;align-items:center;gap:var(--space-3);">
             <div class="skill-card-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
