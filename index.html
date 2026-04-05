@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seeshuraj Bhoopalan — AI & Software Engineer</title>
-  <meta name="description" content="AI & Software Engineer · MSc HPC, Trinity College Dublin · Building LLM-powered tools, cloud systems and full-stack products.">
-  <meta property="og:title" content="Seeshuraj Bhoopalan — AI & Software Engineer">
-  <meta property="og:description" content="MSc HPC, Trinity College Dublin. Open to grad/junior roles in Dublin, EU & remote.">
+  <title>Seeshuraj Bhoopalan — AI &amp; Software Engineer</title>
+  <meta name="description" content="AI &amp; Software Engineer · MSc HPC, Trinity College Dublin · Building LLM-powered tools, cloud systems and full-stack products.">
+  <meta property="og:title" content="Seeshuraj Bhoopalan — AI &amp; Software Engineer">
+  <meta property="og:description" content="MSc HPC, Trinity College Dublin. Open to grad/junior roles in Dublin, EU &amp; remote.">
   <meta property="og:type" content="website">
 
   <!-- Fonts -->
@@ -19,6 +19,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <!-- Lucide icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- Avatar widget styles -->
+  <link rel="stylesheet" href="./avatar.css">
 
   <style>
     /* ═══════════════════════════════════════════════
@@ -220,22 +223,10 @@
       align-items: center;
       gap: var(--space-12);
     }
-
-    .hero-left,
-    .hero-right {
-      min-width: 0;
-    }
-
+    .hero-left, .hero-right { min-width: 0; }
     @media (max-width: 900px) {
-      .hero-content {
-        grid-template-columns: 1fr;
-        gap: var(--space-10);
-      }
-      .hero-right {
-        order: -1;
-        display: flex;
-        justify-content: center;
-      }
+      .hero-content { grid-template-columns: 1fr; gap: var(--space-10); }
+      .hero-right { order: -1; display: flex; justify-content: center; }
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: var(--space-2);
@@ -333,61 +324,35 @@
     .edu-school { font-size: var(--text-sm); color: var(--color-primary); font-weight: 500; }
     .edu-year { font-size: var(--text-xs); color: var(--color-text-faint); margin-top: var(--space-1); letter-spacing: 0.04em; }
 
-    /* Photo placeholder */
-    .photo-wrap {
-      aspect-ratio: 4/5; border-radius: var(--radius-2xl); overflow: hidden;
-      border: 1px solid oklch(from var(--color-text) l c h / 0.10);
-      position: relative; background: var(--color-surface-2);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: var(--space-4); max-width: 360px; width: 100%;
-    }
-    .photo-wrap img {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-      display: none; /* set to block once you add the real image */
-    }
-    .photo-placeholder-icon {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: var(--color-surface-dynamic);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--color-text-faint); z-index: 1;
-    }
-    .photo-placeholder-text { font-size: var(--text-xs); color: var(--color-text-faint); letter-spacing: 0.06em; z-index: 1; }
-    .photo-wrap::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, color-mix(in oklch, var(--color-primary) 6%, transparent), transparent 60%);
-      pointer-events: none; z-index: 0;
-    }
+    /* ── Anime avatar wrap ── */
     .anime-wrap {
       position: relative;
       aspect-ratio: 4/5;
       max-width: 360px;
       width: 100%;
       border-radius: var(--radius-2xl);
-      overflow: hidden;
+      overflow: visible; /* allow bubble to escape */
       border: 1px solid oklch(from var(--color-text) l c h / 0.10);
       background: var(--color-surface-2);
       box-shadow: var(--shadow-md);
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
     }
-
     .anime-avatar {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform-origin: center;
-      transition: transform var(--transition-interactive), filter var(--transition-interactive);
+      border-radius: var(--radius-2xl);
+      transform-origin: center bottom;
     }
-
-    .anime-wrap:hover .anime-avatar {
-      transform: scale(1.03);
-      filter: saturate(1.1);
-    }
-
     .anime-overlay {
-      position: absolute;
-      inset: auto 0 0 0;
+      position: relative;
+      z-index: 2;
+      width: 100%;
       padding: var(--space-4);
       background: linear-gradient(
         to top,
@@ -398,12 +363,10 @@
       flex-direction: column;
       gap: var(--space-2);
     }
-
     .anime-caption {
       font-size: var(--text-xs);
       color: var(--color-text-muted);
     }
-
     .btn-anime-talk {
       align-self: flex-start;
       display: inline-flex;
@@ -419,20 +382,12 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
-    .btn-anime-talk:hover {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 18px var(--color-primary-glow);
-    }
-
+    .btn-anime-talk:hover { border-color: var(--color-primary); box-shadow: 0 0 18px var(--color-primary-glow); }
     .anime-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
+      width: 8px; height: 8px; border-radius: 999px;
       background: var(--color-primary);
       box-shadow: 0 0 10px var(--color-primary-glow);
     }
-
 
     /* ═══ SKILLS ═══ */
     .skills-section { margin-top: var(--space-12); }
@@ -579,7 +534,10 @@
       background: var(--color-surface); text-align: center;
     }
     .contact-inner { max-width: var(--content-narrow); margin: 0 auto; }
-    .contact-heading { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800; letter-spacing: -0.03em; color: var(--color-text); margin-bottom: var(--space-4); }
+    .contact-heading {
+      font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 800;
+      letter-spacing: -0.03em; color: var(--color-text); margin-bottom: var(--space-4);
+    }
     .contact-sub { font-size: var(--text-base); color: var(--color-text-muted); margin-bottom: var(--space-10); line-height: 1.65; }
     .contact-links { display: flex; justify-content: center; gap: var(--space-4); flex-wrap: wrap; }
     .btn-outline {
@@ -596,8 +554,7 @@
     footer {
       padding: var(--space-8) clamp(var(--space-8), 8vw, var(--space-24));
       border-top: 1px solid var(--color-divider);
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: var(--space-4);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);
     }
     .footer-copy { font-size: var(--text-xs); color: var(--color-text-faint); }
     .footer-copy span { color: var(--color-primary); }
@@ -606,7 +563,8 @@
     .cursor-glow {
       position: fixed; width: 500px; height: 500px; border-radius: 50%;
       background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%);
-      pointer-events: none; z-index: 0; transform: translate(-50%, -50%); will-change: left, top;
+      pointer-events: none; z-index: 0; transform: translate(-50%, -50%);
+      will-change: left, top;
     }
 
     /* ═══ MOBILE ═══ */
@@ -617,7 +575,6 @@
       .hero-stats { gap: var(--space-8); }
       footer { flex-direction: column; text-align: center; }
       .skills-grid { grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); }
-      .photo-wrap { max-width: 100%; }
     }
     @media (max-width: 480px) {
       #hero { padding: var(--space-24) var(--space-5) var(--space-16); }
@@ -629,13 +586,13 @@
   <a href="#main" class="skip-link">Skip to content</a>
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
-  <!-- ═══ NAVIGATION ═══ -->
+  <!-- NAVIGATION -->
   <nav id="navbar" role="navigation" aria-label="Main navigation">
-    <a href="#hero" class="nav-logo" aria-label="Seeshuraj Bhoopalan — home">
-      <!-- SVG monogram logo -->
-      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true">
-        <rect width="30" height="30" rx="8" fill="currentColor" opacity="0.1"/>
-        <path d="M9 11C9 9.9 9.9 9 11 9h7c1.1 0 2 .9 2 2s-.9 2-2 2h-7c-1.1 0-2 .9-2 2s.9 2 2 2h7c1.1 0 2 .9 2 2s-.9 2-2 2H11c-1.1 0-2-.9-2-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    <a href="#hero" class="nav-logo" aria-label="Seeshuraj home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="24" height="24" rx="6" stroke="currentColor" stroke-width="2"/>
+        <path d="M8 20 L14 8 L20 20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 16 H18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
       <span class="nav-logo-text">seeshuraj.b</span>
     </a>
@@ -647,375 +604,332 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="btn-theme" data-theme-toggle aria-label="Switch to light mode">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <button class="btn-theme" data-theme-toggle aria-label="Switch theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
       <a href="mailto:bhoopals@tcd.ie" class="btn-primary">Hire me</a>
     </div>
   </nav>
 
-  <!-- ═══ HERO ═══ -->
-  <section id="hero" aria-label="Hero introduction">
-    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
-    <div class="hero-grid" aria-hidden="true"></div>
-    <div class="hero-particles" id="particles" aria-hidden="true"></div>
-    <div class="hero-content" id="main">
-      <div class="hero-left">
-      <div class="hero-badge" aria-label="Status: open to work">
-        <span class="badge-dot"></span>
-        Available · Dublin · EU · Remote
-      </div>
-      <h1 class="hero-heading" id="heroHeading" aria-label="Seeshuraj Bhoopalan — AI & Software Engineer">
-        <span class="line"><span class="word">Seeshuraj</span></span>
-        <span class="line"><span class="word">Bhoopalan</span></span>
-        <span class="line"><span class="word accent">AI &amp;&nbsp;</span><span class="word">Software</span></span>
-        <span class="line"><span class="word">Engineer</span></span>
-      </h1>
-      <p class="hero-subtitle" id="heroSubtitle">
-        MSc High Performance Computing · Trinity College Dublin.
-        Building LLM-powered tools, cloud systems and full-stack products —
-        with a focus on performance, scale and correctness.
-      </p>
-      <div class="hero-ctas" id="heroCtas">
-        <a href="#projects" class="btn-primary">View projects</a>
-        <a href="mailto:bhoopals@tcd.ie" class="btn-ghost">bhoopals@tcd.ie</a>
-      </div>
-      <div class="hero-stats" id="heroStats" aria-label="Quick stats">
-        <div class="stat">
-          <span class="stat-number" data-count="2.5">0</span>
-          <span class="stat-label">Years exp.</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number" data-count="5">0</span>
-          <span class="stat-label">Projects shipped</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number" data-count="20">0</span>
-          <span class="stat-label">Technologies</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number" data-count="3">0</span>
-          <span class="stat-label">Hackathon wins</span>
-        </div>
-      </div>
-    </div>
+  <!-- MAIN -->
+  <main id="main">
 
-    <div class="hero-right">
-      <div class="photo-wrap" aria-label="Profile photo">
-        <img src="./assets/background-profile.jpg"
-             alt="Seeshuraj Bhoopalan"
-             width="360" height="450"
-             loading="lazy"
-             style="display:block">
-      </div>
-    </div>
-    <div class="scroll-hint" aria-hidden="true">
-      <div class="scroll-line"></div>
-    </div>
-  </section>
-
-  <!-- ═══ ABOUT ═══ -->
-  <section id="about" aria-labelledby="aboutHeading" style="scroll-margin-top:80px">
-    <div class="about-inner">
-
-      <div class="about-grid">
-        <!-- LEFT — text + education -->
-        <div class="reveal">
-          <p class="section-label">About me</p>
-          <h2 class="about-heading" id="aboutHeading">I build intelligent systems that ship to production.</h2>
-          <p class="about-body">
-            Early-career AI &amp; Software Engineer with hands-on experience in LLM-powered
-            applications, cloud infrastructure, and full-stack development. Proficient in
-            few-shot prompting, chain-of-thought reasoning, RAG pipelines, and multi-agent
-            LLM workflows. Built and deployed ETL pipelines, observability stacks, and
-            AI-powered tools across AWS and Azure.
+    <!-- HERO -->
+    <section id="hero" aria-label="Hero">
+      <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-particles" id="particles" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-badge">
+            <span class="badge-dot" aria-hidden="true"></span>
+            Available &middot; Dublin &middot; EU &middot; Remote
+          </div>
+          <h1 class="hero-heading" aria-label="Seeshuraj Bhoopalan AI and Software Engineer">
+            <span class="line"><span class="word">Seeshuraj</span></span>
+            <span class="line"><span class="word">Bhoopalan</span></span>
+            <span class="line"><span class="word accent">AI &amp;</span></span>
+            <span class="line"><span class="word">Software</span></span>
+            <span class="line"><span class="word">Engineer</span></span>
+          </h1>
+          <p class="hero-subtitle" id="heroSubtitle">
+            MSc High Performance Computing &middot; Trinity College Dublin.
+            Building LLM-powered tools, cloud systems and full-stack products
+            &mdash; with a focus on performance, scale and correctness.
           </p>
-          <p class="about-body">
-            Currently completing my MSc in High Performance Computing at Trinity College Dublin,
-            with a focus on ML systems performance and cloud resilience. Previously published
-            at ACM 2023 on multi-modal biometric authentication.
-          </p>
-            <div class="edu-item">
-              <p class="edu-degree">PG Diploma — High Performance Computing</p>
-              <p class="edu-school">Trinity College Dublin</p>
-              <p class="edu-year">2024 – 2026 · 2:1</p>
-            </div>
-            <div class="edu-item">
-              <p class="edu-degree">B.Tech. — Information Technology</p>
-              <p class="edu-school">St. Joseph's College of Engineering, Anna University</p>
-              <p class="edu-year">2020 – 2024 · 8.63</p>
-            </div>
+          <div class="hero-ctas" id="heroCtas">
+            <a href="#projects" class="btn-primary">View projects</a>
+            <a href="mailto:bhoopals@tcd.ie" class="btn-ghost">bhoopals@tcd.ie</a>
+          </div>
+          <div class="hero-stats" id="heroStats">
+            <div class="stat"><span class="stat-number" data-count="2">0</span><span class="stat-label">Years exp.</span></div>
+            <div class="stat"><span class="stat-number" data-count="12">0</span><span class="stat-label">Projects shipped</span></div>
+            <div class="stat"><span class="stat-number" data-count="20">0</span><span class="stat-label">Technologies</span></div>
+            <div class="stat"><span class="stat-number" data-count="3">0</span><span class="stat-label">Hackathon wins</span></div>
           </div>
         </div>
-
-        <!-- RIGHT — anime avatar -->
-        <div class="reveal" style="display:flex; justify-content:center;">
-          <div class="anime-wrap" aria-label="Interactive anime avatar of Seeshuraj">
-            <img
-              src="./assets/anime-seeshuraj.png"
-              alt="Anime avatar of Seeshuraj Bhoopalan"
-              width="360"
-              height="450"
-              loading="lazy"
-              class="anime-avatar"
-            >
-
-            <div class="anime-overlay">
-              <p class="anime-caption">Ask my AI avatar about my experience.</p>
-              <button class="btn-anime-talk" type="button" id="animeTalkBtn">
-                <span class="anime-dot"></span>
-                Talk to Seeshuraj
-              </button>
-            </div>
+        <div class="hero-right">
+          <!-- Hero anime avatar (same image, smaller) -->
+          <div style="position:relative;width:min(260px,88vw);aspect-ratio:4/5;border-radius:var(--radius-2xl);overflow:hidden;border:1px solid oklch(from var(--color-primary) l c h / 0.25);box-shadow:0 0 48px var(--color-primary-glow);">
+            <img src="./assets/anime-seeshuraj.png" alt="Anime character representing Seeshuraj" width="260" height="325" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,color-mix(in oklch,var(--color-bg) 60%,transparent) 0%,transparent 50%);pointer-events:none;"></div>
           </div>
         </div>
+      </div>
+      <div class="scroll-hint" aria-hidden="true">
+        <span class="scroll-line"></span>
+      </div>
+    </section>
 
-      <!-- Skills grid below both columns -->
-      <div class="skills-section reveal">
-        <p class="skills-section-title">Technical skills</p>
-        <div class="skills-grid">
-          <div class="skill-group">
-            <p class="skill-group-title">ML &amp; LLMs</p>
-            <div class="tech-pills" role="list">
-              <span class="pill">LangChain</span>
-              <span class="pill">LangGraph</span>
-              <span class="pill">Ollama</span>
-              <span class="pill">RAG</span>
-              <span class="pill">PyTorch</span>
-              <span class="pill">Hugging Face</span>
-              <span class="pill">OpenAI API</span>
-              <span class="pill">Amazon Bedrock</span>
+    <!-- ABOUT -->
+    <section id="about" aria-label="About Seeshuraj">
+      <div class="about-inner">
+        <div class="about-grid">
+          <!-- Left: text -->
+          <div>
+            <p class="section-label">About me</p>
+            <h2 class="about-heading">I build intelligent systems that ship to production.</h2>
+            <p class="about-body">
+              Early-career AI &amp; Software Engineer with hands-on experience in LLM-powered applications,
+              cloud infrastructure, and full-stack development. Proficient in few-shot prompting,
+              chain-of-thought reasoning, RAG pipelines, and multi-agent LLM workflows.
+              Built and deployed ETL pipelines, observability stacks, and AI-powered tools across AWS and Azure.
+            </p>
+            <p class="about-body">
+              Currently completing my MSc in High Performance Computing at Trinity College Dublin,
+              with a focus on ML systems performance and cloud resilience.
+              Previously published at ACM 2023 on multi-modal biometric authentication.
+            </p>
+            <div class="edu-block">
+              <div class="edu-item">
+                <div class="edu-degree">PG Diploma &mdash; High Performance Computing</div>
+                <div class="edu-school">Trinity College Dublin</div>
+                <div class="edu-year">2024 &ndash; 2026 &middot; 2:1</div>
+              </div>
+              <div class="edu-item">
+                <div class="edu-degree">B.Tech. &mdash; Information Technology</div>
+                <div class="edu-school">St. Joseph's College of Engineering, Anna University</div>
+                <div class="edu-year">2020 &ndash; 2024 &middot; 8.63</div>
+              </div>
+            </div>
+
+            <!-- SKILLS -->
+            <div class="skills-section">
+              <p class="skills-section-title">Technical skills</p>
+              <div class="skills-grid">
+                <div>
+                  <p class="skill-group-title">ML &amp; LLMs</p>
+                  <div class="tech-pills">
+                    <span class="pill">LangChain</span><span class="pill">LangGraph</span>
+                    <span class="pill">Ollama</span><span class="pill">RAG</span>
+                    <span class="pill">PyTorch</span><span class="pill">Hugging Face</span>
+                    <span class="pill">OpenAI API</span><span class="pill">Amazon Bedrock</span>
+                  </div>
+                </div>
+                <div>
+                  <p class="skill-group-title">Languages</p>
+                  <div class="tech-pills">
+                    <span class="pill">Python</span><span class="pill">TypeScript</span>
+                    <span class="pill">C++</span><span class="pill">JavaScript</span>
+                    <span class="pill">Java</span><span class="pill">SQL</span><span class="pill">Bash</span>
+                  </div>
+                </div>
+                <div>
+                  <p class="skill-group-title">Cloud &amp; DevOps</p>
+                  <div class="tech-pills">
+                    <span class="pill">AWS</span><span class="pill">Azure</span>
+                    <span class="pill">Docker</span><span class="pill">Kubernetes</span>
+                    <span class="pill">Jenkins</span><span class="pill">Terraform</span>
+                    <span class="pill">CI/CD</span><span class="pill">CloudWatch</span>
+                  </div>
+                </div>
+                <div>
+                  <p class="skill-group-title">Web &amp; Data</p>
+                  <div class="tech-pills">
+                    <span class="pill">FastAPI</span><span class="pill">React</span>
+                    <span class="pill">Next.js</span><span class="pill">Node.js</span>
+                    <span class="pill">PostgreSQL</span><span class="pill">MongoDB</span><span class="pill">Supabase</span>
+                  </div>
+                </div>
+                <div>
+                  <p class="skill-group-title">HPC &amp; Systems</p>
+                  <div class="tech-pills">
+                    <span class="pill">CUDA</span><span class="pill">OpenMP</span>
+                    <span class="pill">MPI</span><span class="pill">Prometheus</span>
+                    <span class="pill">Grafana</span><span class="pill">Linux</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="skill-group">
-            <p class="skill-group-title">Languages</p>
-            <div class="tech-pills" role="list">
-              <span class="pill">Python</span>
-              <span class="pill">TypeScript</span>
-              <span class="pill">C++</span>
-              <span class="pill">JavaScript</span>
-              <span class="pill">Java</span>
-              <span class="pill">SQL</span>
-              <span class="pill">Bash</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <p class="skill-group-title">Cloud &amp; DevOps</p>
-            <div class="tech-pills" role="list">
-              <span class="pill">AWS</span>
-              <span class="pill">Azure</span>
-              <span class="pill">Docker</span>
-              <span class="pill">Kubernetes</span>
-              <span class="pill">Jenkins</span>
-              <span class="pill">Terraform</span>
-              <span class="pill">CI/CD</span>
-              <span class="pill">CloudWatch</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <p class="skill-group-title">Web &amp; Data</p>
-            <div class="tech-pills" role="list">
-              <span class="pill">FastAPI</span>
-              <span class="pill">React</span>
-              <span class="pill">Next.js</span>
-              <span class="pill">Node.js</span>
-              <span class="pill">PostgreSQL</span>
-              <span class="pill">MongoDB</span>
-              <span class="pill">Supabase</span>
-            </div>
-          </div>
-          <div class="skill-group">
-            <p class="skill-group-title">HPC &amp; Systems</p>
-            <div class="tech-pills" role="list">
-              <span class="pill">CUDA</span>
-              <span class="pill">OpenMP</span>
-              <span class="pill">MPI</span>
-              <span class="pill">Prometheus</span>
-              <span class="pill">Grafana</span>
-              <span class="pill">Linux</span>
+
+          <!-- Right: anime avatar + AI chat -->
+          <div style="display:flex;justify-content:center;">
+            <div class="anime-wrap avatar-state-idle" id="animeWrap">
+              <!-- The anime image -->
+              <img
+                src="./assets/anime-seeshuraj.png"
+                alt="Anime avatar of Seeshuraj Bhoopalan"
+                class="anime-avatar"
+                width="360"
+                height="450"
+                loading="lazy"
+              >
+              <!-- Speech bubble (populated by avatar.js) -->
+              <div id="avatarBubble" class="avatar-bubble" aria-live="polite" role="status"></div>
+              <!-- Overlay with caption + talk button -->
+              <div class="anime-overlay">
+                <p class="anime-caption">Ask my AI avatar about my experience.</p>
+                <span id="avatarMicNote" class="avatar-mic-note"></span>
+                <button
+                  id="animeTalkBtn"
+                  class="btn-anime-talk"
+                  aria-label="Talk to Seeshuraj AI avatar"
+                  type="button"
+                >
+                  <span class="anime-dot" aria-hidden="true"></span>
+                  Talk to Seeshuraj
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
-
-  <!-- ═══ EXPERIENCE ═══ -->
-  <section id="experience" aria-labelledby="expHeading" style="scroll-margin-top:80px">
-    <div class="exp-inner">
-      <div class="reveal">
+    <!-- EXPERIENCE -->
+    <section id="experience" aria-label="Work experience">
+      <div class="exp-inner">
         <p class="section-label">Work history</p>
-        <h2 class="section-heading" id="expHeading">Experience</h2>
+        <h2 class="section-heading">Experience</h2>
+        <div class="timeline" role="list">
+          <div class="timeline-item" role="listitem">
+            <div class="exp-meta">
+              <div>
+                <div class="exp-role">Freelance Full Stack Developer</div>
+                <div class="exp-company">JJS Impex</div>
+              </div>
+              <div class="exp-date">Aug 2025 &ndash; Nov 2025</div>
+            </div>
+            <ul class="exp-points">
+              <li>Developed and deployed React front-end with Node.js backend; built product catalog and inquiry workflows with real-time validation, improving lead conversion by 40%.</li>
+              <li>Implemented SEO strategies improving organic visibility by 35%; integrated Zoho Workforce for automated scheduling and attendance tracking.</li>
+            </ul>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <div class="exp-meta">
+              <div>
+                <div class="exp-role">Cloud Engineer</div>
+                <div class="exp-company">Beyond Youth's Solution</div>
+              </div>
+              <div class="exp-date">Apr 2024 &ndash; Jun 2025</div>
+            </div>
+            <ul class="exp-points">
+              <li>Designed scalable AWS infrastructures with SLOs/SLIs, maintaining 99.9% uptime with error budget tracking.</li>
+              <li>Automated ETL pipelines for multi-source integration; deployed CI/CD pipelines using Docker and Jenkins, reducing release cycle by 40%.</li>
+              <li>Implemented observability stack (CloudWatch, distributed tracing); authored postmortems and RCAs for production incidents.</li>
+            </ul>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <div class="exp-meta">
+              <div>
+                <div class="exp-role">Backend Developer Intern</div>
+                <div class="exp-company">Lyft</div>
+              </div>
+              <div class="exp-date">Jan 2023 &ndash; Jun 2023</div>
+            </div>
+            <ul class="exp-points">
+              <li>Engineered high-throughput Flask APIs managing 1M+ transactions/day; built microservices increasing reliability by 30%.</li>
+              <li>Optimised MongoDB and PostgreSQL queries, reducing latency by 25%; debugged production issues across API, database, and infra layers.</li>
+            </ul>
+          </div>
+          <div class="timeline-item" role="listitem">
+            <div class="exp-meta">
+              <div>
+                <div class="exp-role">Web Developer Intern</div>
+                <div class="exp-company">Tranz Mannequins Pvt. Ltd</div>
+              </div>
+              <div class="exp-date">Apr 2022 &ndash; Oct 2022</div>
+            </div>
+            <ul class="exp-points">
+              <li>Developed a Django-based e-commerce platform boosting sales by 50%; integrated payment gateways and improved real-time transaction flow.</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="timeline" role="list">
+    </section>
 
-        <div class="timeline-item reveal" role="listitem">
-          <div class="exp-meta">
-            <div>
-              <p class="exp-role">Freelance Full Stack Developer</p>
-              <p class="exp-company">JJS Impex</p>
-            </div>
-            <span class="exp-date">Aug 2025 – Nov 2025</span>
-          </div>
-          <ul class="exp-points">
-            <li>Developed and deployed React front-end with Node.js backend; built product catalog and inquiry workflows with real-time validation, improving lead conversion by 40%.</li>
-            <li>Implemented SEO strategies improving organic visibility by 35%; integrated Zoho Workforce for automated scheduling and attendance tracking.</li>
-          </ul>
+    <!-- PROJECTS -->
+    <section id="projects" aria-label="Featured projects">
+      <div class="projects-header">
+        <div>
+          <p class="section-label">Featured work</p>
+          <h2 class="projects-heading">Key projects</h2>
         </div>
-
-        <div class="timeline-item reveal" role="listitem">
-          <div class="exp-meta">
-            <div>
-              <p class="exp-role">Cloud Engineer</p>
-              <p class="exp-company">Beyond Youth's Solution</p>
-            </div>
-            <span class="exp-date">Apr 2024 – Jun 2025</span>
-          </div>
-          <ul class="exp-points">
-            <li>Designed scalable AWS infrastructures with SLOs/SLIs, maintaining 99.9% uptime with error budget tracking.</li>
-            <li>Automated ETL pipelines for multi-source integration; deployed CI/CD pipelines using Docker and Jenkins, reducing release cycle by 40%.</li>
-            <li>Implemented observability stack (CloudWatch, distributed tracing); authored postmortems and RCAs for production incidents.</li>
-          </ul>
-        </div>
-
-        <div class="timeline-item reveal" role="listitem">
-          <div class="exp-meta">
-            <div>
-              <p class="exp-role">Backend Developer Intern</p>
-              <p class="exp-company">Lyft</p>
-            </div>
-            <span class="exp-date">Jan 2023 – Jun 2023</span>
-          </div>
-          <ul class="exp-points">
-            <li>Engineered high-throughput Flask APIs managing 1M+ transactions/day; built microservices increasing reliability by 30%.</li>
-            <li>Optimised MongoDB and PostgreSQL queries, reducing latency by 25%; debugged production issues across API, database, and infra layers.</li>
-          </ul>
-        </div>
-
-        <div class="timeline-item reveal" role="listitem">
-          <div class="exp-meta">
-            <div>
-              <p class="exp-role">Web Developer Intern</p>
-              <p class="exp-company">Tranz Mannequins Pvt. Ltd</p>
-            </div>
-            <span class="exp-date">Apr 2022 – Oct 2022</span>
-          </div>
-          <ul class="exp-points">
-            <li>Developed a Django-based e-commerce platform boosting sales by 50%; integrated payment gateways and improved real-time transaction flow.</li>
-          </ul>
-        </div>
-
+        <a href="https://github.com/seeshuraj" class="projects-link" target="_blank" rel="noopener noreferrer">All on GitHub &rarr;</a>
       </div>
-    </div>
-  </section>
+      <div class="projects-grid" id="projectsGrid" role="list"></div>
+    </section>
 
-  <!-- ═══ PROJECTS ═══ -->
-  <section id="projects" aria-labelledby="projectsHeading" style="scroll-margin-top:80px">
-    <div class="projects-header reveal">
-      <div>
-        <p class="section-label">Featured work</p>
-        <h2 class="projects-heading" id="projectsHeading">Key projects</h2>
-      </div>
-      <a href="https://github.com/seeshuraj" class="projects-link" target="_blank" rel="noopener noreferrer">
-        All on GitHub &rarr;
-      </a>
-    </div>
-    <div class="projects-grid" id="projectsGrid" aria-label="Project cards"></div>
-  </section>
-
-  <!-- ═══ CERTIFICATIONS ═══ -->
-  <section id="certs" aria-labelledby="certsHeading" style="scroll-margin-top:80px">
-    <div class="certs-inner">
-      <div class="reveal">
+    <!-- CERTIFICATIONS -->
+    <section id="certs" aria-label="Certifications and achievements">
+      <div class="certs-inner">
         <p class="section-label">Learning &amp; recognition</p>
-        <h2 class="section-heading" id="certsHeading">Certifications &amp; achievements</h2>
-      </div>
-
-      <div class="certs-grid" role="list">
-        <div class="cert-card reveal" role="listitem">
-          <p class="cert-issuer">Anthropic</p>
-          <p class="cert-name">Claude with Amazon Bedrock — Building, evaluating &amp; deploying Claude-based apps (RAG, tools, evals)</p>
-          <p class="cert-year">2026</p>
+        <h2 class="section-heading">Certifications &amp; achievements</h2>
+        <div class="certs-grid" role="list">
+          <div class="cert-card" role="listitem">
+            <div class="cert-issuer">Anthropic</div>
+            <div class="cert-name">Claude with Amazon Bedrock &mdash; Building, evaluating &amp; deploying Claude-based apps (RAG, tools, evals)</div>
+            <div class="cert-year">2026</div>
+          </div>
+          <div class="cert-card" role="listitem">
+            <div class="cert-issuer">Microsoft</div>
+            <div class="cert-name">Applied Skills: Create an AI Agent</div>
+            <div class="cert-year">Feb 2026 &middot; Credential A41534D6AD963F5A</div>
+          </div>
+          <div class="cert-card" role="listitem">
+            <div class="cert-issuer">Anthropic</div>
+            <div class="cert-name">AI Fluency &mdash; 4D framework for ethical &amp; effective AI collaboration</div>
+            <div class="cert-year">2026</div>
+          </div>
+          <div class="cert-card" role="listitem">
+            <div class="cert-issuer">Microsoft Azure</div>
+            <div class="cert-name">Azure AI Vision &middot; Generative AI &amp; Agents &middot; Power BI</div>
+            <div class="cert-year">2025 &ndash; 2026</div>
+          </div>
+          <div class="cert-card" role="listitem">
+            <div class="cert-issuer">AWS &middot; NVIDIA CUDA</div>
+            <div class="cert-name">AWS Cloud &amp; DevOps &middot; HPC Programming (CUDA / OpenMP)</div>
+            <div class="cert-year">2023</div>
+          </div>
+          <div class="cert-card" role="listitem">
+            <div class="cert-issuer">ACM 2023</div>
+            <div class="cert-name">Publication: &ldquo;Multi-Modal Biometric Authentication with Dynamic Hosting&rdquo; &mdash; scalable biometric auth system</div>
+            <div class="cert-year">2023</div>
+          </div>
         </div>
-        <div class="cert-card reveal" role="listitem">
-          <p class="cert-issuer">Microsoft</p>
-          <p class="cert-name">Applied Skills: Create an AI Agent</p>
-          <p class="cert-year">Feb 2026 · Credential A41534D6AD963F5A</p>
-        </div>
-        <div class="cert-card reveal" role="listitem">
-          <p class="cert-issuer">Anthropic</p>
-          <p class="cert-name">AI Fluency — 4D framework for ethical &amp; effective AI collaboration</p>
-          <p class="cert-year">2026</p>
-        </div>
-        <div class="cert-card reveal" role="listitem">
-          <p class="cert-issuer">Microsoft Azure</p>
-          <p class="cert-name">Azure AI Vision · Generative AI &amp; Agents · Power BI</p>
-          <p class="cert-year">2025 – 2026</p>
-        </div>
-        <div class="cert-card reveal" role="listitem">
-          <p class="cert-issuer">AWS · NVIDIA CUDA</p>
-          <p class="cert-name">AWS Cloud &amp; DevOps · HPC Programming (CUDA / OpenMP)</p>
-          <p class="cert-year">2023</p>
-        </div>
-        <div class="cert-card reveal" role="listitem">
-          <p class="cert-issuer">ACM 2023</p>
-          <p class="cert-name">Publication: "Multi-Modal Biometric Authentication with Dynamic Hosting" — scalable biometric auth system</p>
-          <p class="cert-year">2023</p>
-        </div>
-      </div>
-
-      <div class="achievements-row reveal" role="list" aria-label="Achievements">
-        <div class="ach-badge" role="listitem">
-          <span class="ach-icon">🏆</span>
-          <span class="ach-text"><strong>Smart India Hackathon</strong> — Winner 2023 · Mentor 2025</span>
-        </div>
-        <div class="ach-badge" role="listitem">
-          <span class="ach-icon">🥇</span>
-          <span class="ach-text"><strong>IEEE Conocithon 2022</strong> — Winner (ML edtech tools)</span>
-        </div>
-        <div class="ach-badge" role="listitem">
-          <span class="ach-icon">🎯</span>
-          <span class="ach-text"><strong>Coding Ninja 2022</strong> — 8th place nationally</span>
+        <div class="achievements-row">
+          <div class="ach-badge"><span class="ach-icon">&#127942;</span><span class="ach-text"><strong>Smart India Hackathon</strong> &mdash; Winner 2023 &middot; Mentor 2025</span></div>
+          <div class="ach-badge"><span class="ach-icon">&#129351;</span><span class="ach-text"><strong>IEEE Conocithon 2022</strong> &mdash; Winner (ML edtech tools)</span></div>
+          <div class="ach-badge"><span class="ach-icon">&#127919;</span><span class="ach-text"><strong>Coding Ninja 2022</strong> &mdash; 8th place nationally</span></div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ═══ CONTACT ═══ -->
-  <section id="contact" aria-labelledby="contactHeading" style="scroll-margin-top:80px">
-    <div class="contact-inner reveal">
-      <p class="section-label">Get in touch</p>
-      <h2 class="contact-heading" id="contactHeading">Let's build something together</h2>
-      <p class="contact-sub">
-        Open to graduate AI / software engineering roles in Dublin, EU, and remote.
-        Available immediately. I respond to every email.
-      </p>
-      <div class="contact-links">
-        <a href="mailto:bhoopals@tcd.ie" class="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          bhoopals@tcd.ie
-        </a>
-        <a href="https://linkedin.com/in/seeshuraj" class="btn-outline" target="_blank" rel="noopener noreferrer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          LinkedIn
-        </a>
-        <a href="https://github.com/seeshuraj" class="btn-outline" target="_blank" rel="noopener noreferrer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          GitHub
-        </a>
+    <!-- CONTACT -->
+    <section id="contact" aria-label="Contact">
+      <div class="contact-inner">
+        <p class="section-label">Get in touch</p>
+        <h2 class="contact-heading">Let&rsquo;s build something together</h2>
+        <p class="contact-sub">
+          Open to graduate AI / software engineering roles in Dublin, EU, and remote.
+          Available immediately. I respond to every email.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:bhoopals@tcd.ie" class="btn-outline">bhoopals@tcd.ie</a>
+          <a href="https://linkedin.com/in/seeshuraj" class="btn-outline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/seeshuraj" class="btn-outline" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <p class="contact-note">Based in Dublin 18, Ireland &middot; Stamp 2 visa &middot; Open to sponsorship</p>
       </div>
-      <p class="contact-note">Based in Dublin 18, Ireland · Stamp 2 visa · Open to sponsorship</p>
-    </div>
-  </section>
+    </section>
 
-  <!-- ═══ FOOTER ═══ -->
+  </main>
+
+  <!-- FOOTER -->
   <footer>
-    <p class="footer-copy">© 2026 <span>Seeshuraj Bhoopalan</span> — MSc HPC, Trinity College Dublin</p>
-    <p class="footer-copy">Built with GSAP &amp; Lenis · Deployed on <span>GitHub Pages</span></p>
+    <p class="footer-copy">&copy; 2026 &nbsp;<span>Seeshuraj Bhoopalan</span>&nbsp;&mdash; MSc HPC, Trinity College Dublin</p>
+    <p class="footer-copy">Built with GSAP &amp; Lenis &middot; Deployed on <span>GitHub Pages</span></p>
   </footer>
 
-  <!-- ═══ SCRIPTS ═══ -->
+  <!-- Avatar API endpoint (set this to your Render URL once deployed) -->
+  <script>
+    window.__AVATAR_API_URL = ''; /* e.g. 'https://seeshuraj-avatar-api.onrender.com' */
+  </script>
+
+  <!-- Avatar widget -->
+  <script src="./avatar.js" defer></script>
+
   <script>
     /* ── THEME TOGGLE ── */
     (function(){
@@ -1035,7 +949,11 @@
     })();
 
     /* ── LENIS SMOOTH SCROLL ── */
-    const lenis = new Lenis({ duration: 1.2, easing: (t)=>Math.min(1,1.001-Math.pow(2,-10*t)), smooth: true, smoothTouch: false });
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t)=>Math.min(1,1.001-Math.pow(2,-10*t)),
+      smooth: true, smoothTouch: false
+    });
     function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
 
@@ -1056,126 +974,60 @@
     const glow = document.getElementById('cursorGlow');
     let mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
     document.addEventListener('mousemove',(e)=>{ mx=e.clientX; my=e.clientY; });
-    (function glowLoop(){ cx+=(mx-cx)*0.07; cy+=(my-cy)*0.07; glow.style.left=cx+'px'; glow.style.top=cy+'px'; requestAnimationFrame(glowLoop); })();
+    (function glowLoop(){
+      cx+=(mx-cx)*0.07; cy+=(my-cy)*0.07;
+      glow.style.left=cx+'px'; glow.style.top=cy+'px';
+      requestAnimationFrame(glowLoop);
+    })();
 
     /* ── GSAP ANIMATIONS ── */
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", ()=>{
-
-      /* Hero parallax */
       gsap.to('#heroBg',{ yPercent:30, ease:'none', scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:1.5 }});
-
-      /* Hero text reveal */
       const words = document.querySelectorAll('.hero-heading .word');
       gsap.from(words,{ y:'110%', opacity:0, duration:1, ease:'power4.out', stagger:0.055, delay:0.15 });
       gsap.from('#heroSubtitle',{ opacity:0, y:22, duration:0.85, ease:'power3.out', delay:0.7 });
       gsap.from('#heroCtas',{ opacity:0, y:18, duration:0.7, ease:'power3.out', delay:0.95 });
       gsap.from('.hero-badge',{ opacity:0, y:-14, duration:0.6, ease:'power3.out', delay:0.1 });
-
-      /* Stats count-up */
-      gsap.from('#heroStats',{
-        opacity:0, y:20, duration:0.6, ease:'power3.out', delay:1.1,
+      gsap.from('#heroStats',{ opacity:0, y:20, duration:0.6, ease:'power3.out', delay:1.1,
         onComplete:()=>{
           document.querySelectorAll('[data-count]').forEach(el=>{
             const target = parseInt(el.getAttribute('data-count'));
-            gsap.to({val:0},{
-              val:target, duration:1.6, ease:'power2.out',
+            gsap.to({val:0},{ val:target, duration:1.6, ease:'power2.out',
               onUpdate: function(){ el.textContent = Math.round(this.targets()[0].val)+'+'; }
             });
           });
         }
       });
-
-      /* Particles */
       const container = document.getElementById('particles');
       for(let i=0;i<22;i++){
         const p = document.createElement('div');
         p.className = 'particle';
         p.style.left = Math.random()*100+'%';
-        p.style.top  = Math.random()*100+'%';
+        p.style.top = Math.random()*100+'%';
         container.appendChild(p);
         gsap.to(p,{ opacity:Math.random()*0.55+0.15, duration:Math.random()*2+1, repeat:-1, yoyo:true, delay:Math.random()*3, ease:'sine.inOut' });
         gsap.to(p,{ y:(Math.random()-0.5)*90, x:(Math.random()-0.5)*45, duration:Math.random()*9+5, repeat:-1, yoyo:true, ease:'sine.inOut', delay:Math.random()*4 });
       }
-
-      /* Timeline slide-in */
-      gsap.from('.timeline-item',{
-        opacity:0, x:-24, duration:0.6, ease:'power3.out', stagger:0.12,
-        scrollTrigger:{ trigger:'#experience', start:'top 78%', once:true }
-      });
-
-      /* Projects cards */
-      gsap.from('.project-card',{
-        opacity:0, y:32, duration:0.6, ease:'power3.out', stagger:0.08,
-        scrollTrigger:{ trigger:'#projects', start:'top 82%', once:true }
-      });
-
-      /* Cert cards */
-      gsap.from('.cert-card',{
-        opacity:0, y:20, duration:0.5, ease:'power3.out', stagger:0.07,
-        scrollTrigger:{ trigger:'#certs', start:'top 82%', once:true }
-      });
+      gsap.from('.timeline-item',{ opacity:0, x:-24, duration:0.6, ease:'power3.out', stagger:0.12, scrollTrigger:{ trigger:'#experience', start:'top 78%', once:true } });
+      gsap.from('.project-card',{ opacity:0, y:32, duration:0.6, ease:'power3.out', stagger:0.08, scrollTrigger:{ trigger:'#projects', start:'top 82%', once:true } });
+      gsap.from('.cert-card',{ opacity:0, y:20, duration:0.5, ease:'power3.out', stagger:0.07, scrollTrigger:{ trigger:'#certs', start:'top 82%', once:true } });
     });
 
-    /* ── PROJECTS DATA (from CV) ── */
+    /* ── PROJECTS DATA ── */
     const projects = [
-      {
-        name: "LangGraph Multi-Agent Chatbot",
-        tags: ["LangGraph","LangChain","Ollama","FastAPI"],
-        desc: "Stateful multi-agent chatbot with supervisor architecture, routing queries across retrieval, reasoning, and summarisation sub-agents. Local LLM inference via Ollama (Llama 3, Mistral) + Claude via Amazon Bedrock.",
-        highlights: ["Few-shot prompting & chain-of-thought per agent node","Red-team adversarial testing — prompt injection mitigation","FastAPI streaming responses with LangGraph checkpointing"],
-        link: "https://github.com/seeshuraj"
-      },
-      {
-        name: "Multi-Agent LLM Automation",
-        tags: ["Azure AI","LangChain","N8N","React"],
-        desc: "N8N-based automation pipeline curating job postings and generating customised resumes using structured and role-playing prompts. Azure AI multi-agent system with self-correction for data visualisation.",
-        highlights: ["Excel upload → auto-clean → interactive charts","Prompt engineering library of reusable templates","LangChain tool-calling with self-correction loops"],
-        link: "https://github.com/seeshuraj"
-      },
-      {
-        name: "ETL Pipeline — Biometric Auth",
-        tags: ["TensorFlow","Keras","Python","React"],
-        desc: "ETL pipeline for facial, lip, and voice recognition with deep learning encoders. Deployed as real-time inference services with low-latency APIs achieving 95% accuracy.",
-        highlights: ["React dashboard for authentication metrics","Batch size tuning for latency vs. throughput","ACM 2023 publication based on this work"],
-        link: "https://github.com/seeshuraj"
-      },
-      {
-        name: "Intelligent Data Centre Selection",
-        tags: ["MPI","Python","Hadoop","React"],
-        desc: "Parallelised KD-Tree nearest-neighbour selection via MPI — 6.3ms query time over 10,000+ nodes. 50% throughput improvement via load balancing across multi-processor nodes.",
-        highlights: ["Interactive React heatmap interface","Graph-based flow visualisation & bottleneck analysis","HPC thesis project — Trinity College Dublin"],
-        link: "https://github.com/seeshuraj"
-      },
-      {
-        name: "LLM Chatbot for Data Insights",
-        tags: ["OpenAI API","LangChain","MongoDB","React"],
-        desc: "Structured and role-playing prompts with few-shot examples. Fine-tuned LLM with hallucination and off-topic output mitigation. MongoDB dynamic Q&A on historical data.",
-        highlights: ["React conversational UI reducing support time by 40%","Smart India Hackathon Winner 2023","LLM failure mode analysis and mitigation"],
-        link: "https://github.com/seeshuraj"
-      },
-      {
-        name: "LLM Test Lab",
-        tags: ["FastAPI","Next.js","Supabase","Python"],
-        desc: "Evaluation platform for AI models — compare outputs, run automated test suites, track regressions, and visualise quality metrics across multiple LLM providers.",
-        highlights: ["FastAPI backend + Next.js frontend","JWT auth + Supabase persistence","Side-by-side model comparison dashboard"],
-        link: "https://github.com/seeshuraj"
-      }
+      { name: "LangGraph Multi-Agent Chatbot", tags: ["LangGraph","LangChain","Ollama","FastAPI"], desc: "Stateful multi-agent chatbot with supervisor architecture, routing queries across retrieval, reasoning, and summarisation sub-agents. Local LLM inference via Ollama (Llama 3, Mistral) + Claude via Amazon Bedrock.", highlights: ["Few-shot prompting & chain-of-thought per agent node","Red-team adversarial testing — prompt injection mitigation","FastAPI streaming responses with LangGraph checkpointing"], link: "https://github.com/seeshuraj" },
+      { name: "Multi-Agent LLM Automation", tags: ["Azure AI","LangChain","N8N","React"], desc: "N8N-based automation pipeline curating job postings and generating customised resumes using structured and role-playing prompts. Azure AI multi-agent system with self-correction for data visualisation.", highlights: ["Excel upload → auto-clean → interactive charts","Prompt engineering library of reusable templates","LangChain tool-calling with self-correction loops"], link: "https://github.com/seeshuraj" },
+      { name: "ETL Pipeline — Biometric Auth", tags: ["TensorFlow","Keras","Python","React"], desc: "ETL pipeline for facial, lip, and voice recognition with deep learning encoders. Deployed as real-time inference services with low-latency APIs achieving 95% accuracy.", highlights: ["React dashboard for authentication metrics","Batch size tuning for latency vs. throughput","ACM 2023 publication based on this work"], link: "https://github.com/seeshuraj" },
+      { name: "Intelligent Data Centre Selection", tags: ["MPI","Python","Hadoop","React"], desc: "Parallelised KD-Tree nearest-neighbour selection via MPI — 6.3ms query time over 10,000+ nodes. 50% throughput improvement via load balancing across multi-processor nodes.", highlights: ["Interactive React heatmap interface","Graph-based flow visualisation & bottleneck analysis","HPC thesis project — Trinity College Dublin"], link: "https://github.com/seeshuraj" },
+      { name: "LLM Chatbot for Data Insights", tags: ["OpenAI API","LangChain","MongoDB","React"], desc: "Structured and role-playing prompts with few-shot examples. Fine-tuned LLM with hallucination and off-topic output mitigation. MongoDB dynamic Q&A on historical data.", highlights: ["React conversational UI reducing support time by 40%","Smart India Hackathon Winner 2023","LLM failure mode analysis and mitigation"], link: "https://github.com/seeshuraj" },
+      { name: "LLM Test Lab", tags: ["FastAPI","Next.js","Supabase","Python"], desc: "Evaluation platform for AI models — compare outputs, run automated test suites, track regressions, and visualise quality metrics across multiple LLM providers.", highlights: ["FastAPI backend + Next.js frontend","JWT auth + Supabase persistence","Side-by-side model comparison dashboard"], link: "https://github.com/seeshuraj" }
     ];
-
     const grid = document.getElementById('projectsGrid');
     projects.forEach(proj=>{
       const card = document.createElement('div');
-      card.className = 'project-card';
-      card.setAttribute('tabindex','0');
-      card.setAttribute('role','article');
-      card.innerHTML = `
-        <div class="project-tags">${proj.tags.map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>
-        <p class="project-name">${proj.name}</p>
-        <p class="project-desc">${proj.desc}</p>
-        <ul class="project-highlights">${proj.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
-        <div class="project-footer"><span class="project-link">View on GitHub &rarr;</span></div>
-      `;
+      card.className = 'project-card'; card.setAttribute('tabindex','0'); card.setAttribute('role','article');
+      card.innerHTML = `<div class="project-tags">${proj.tags.map(t=>`<span class="project-tag">${t}</span>`).join('')}</div><p class="project-name">${proj.name}</p><p class="project-desc">${proj.desc}</p><ul class="project-highlights">${proj.highlights.map(h=>`<li>${h}</li>`).join('')}</ul><div class="project-footer"><span class="project-link">View on GitHub &rarr;</span></div>`;
       card.addEventListener('click',()=>window.open(proj.link,'_blank','noopener,noreferrer'));
       card.addEventListener('keydown',(e)=>{ if(e.key==='Enter') window.open(proj.link,'_blank','noopener,noreferrer'); });
       grid.appendChild(card);
