@@ -323,7 +323,6 @@
           </div>
         </div>
         <div class="hero-right">
-          <!-- ✅ FIX: Hero shows the real background profile photo -->
           <div class="hero-photo-frame">
             <img
               src="./assets/background-profile.jpg"
@@ -463,7 +462,7 @@
     window.__AVATAR_API_URL = 'https://seeshuraj-avatar-api.onrender.com';
   </script>
 
-  <!-- Avatar widget (handles wake-ping internally) -->
+  <!-- Avatar widget -->
   <script src="./avatar.js" defer></script>
 
   <script>
@@ -495,7 +494,7 @@
     document.addEventListener('mousemove',(e)=>{mx=e.clientX;my=e.clientY;});
     (function glowLoop(){cx+=(mx-cx)*0.07;cy+=(my-cy)*0.07;glow.style.left=cx+'px';glow.style.top=cy+'px';requestAnimationFrame(glowLoop);})();
 
-    /* GSAP ANIMATIONS */
+    /* GSAP ANIMATIONS — hero & sections that exist in HTML */
     const mm=gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)",()=>{
       gsap.to('#heroBg',{yPercent:30,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1.5}});
@@ -513,11 +512,11 @@
       const container=document.getElementById('particles');
       for(let i=0;i<22;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';container.appendChild(p);gsap.to(p,{opacity:Math.random()*0.55+0.15,duration:Math.random()*2+1,repeat:-1,yoyo:true,delay:Math.random()*3,ease:'sine.inOut'});gsap.to(p,{y:(Math.random()-0.5)*90,x:(Math.random()-0.5)*45,duration:Math.random()*9+5,repeat:-1,yoyo:true,ease:'sine.inOut',delay:Math.random()*4});}
       gsap.from('.timeline-item',{opacity:0,x:-24,duration:0.6,ease:'power3.out',stagger:0.12,scrollTrigger:{trigger:'#experience',start:'top 78%',once:true}});
-      gsap.from('.project-card',{opacity:0,y:32,duration:0.6,ease:'power3.out',stagger:0.08,scrollTrigger:{trigger:'#projects',start:'top 82%',once:true}});
+      /* NOTE: .project-card animation is registered AFTER cards are injected — see below */
       gsap.from('.cert-card',{opacity:0,y:20,duration:0.5,ease:'power3.out',stagger:0.07,scrollTrigger:{trigger:'#certs',start:'top 82%',once:true}});
     });
 
-    /* PROJECTS DATA */
+    /* PROJECTS DATA — inject cards, THEN register GSAP animation */
     const projects=[
       {name:"LangGraph Multi-Agent Chatbot",tags:["LangGraph","LangChain","Ollama","FastAPI"],desc:"Stateful multi-agent chatbot with supervisor architecture, routing queries across retrieval, reasoning, and summarisation sub-agents. Local LLM inference via Ollama (Llama 3, Mistral) + Claude via Amazon Bedrock.",highlights:["Few-shot prompting & chain-of-thought per agent node","Red-team adversarial testing — prompt injection mitigation","FastAPI streaming responses with LangGraph checkpointing"],link:"https://github.com/seeshuraj"},
       {name:"Multi-Agent LLM Automation",tags:["Azure AI","LangChain","N8N","React"],desc:"N8N-based automation pipeline curating job postings and generating customised resumes using structured and role-playing prompts. Azure AI multi-agent system with self-correction for data visualisation.",highlights:["Excel upload → auto-clean → interactive charts","Prompt engineering library of reusable templates","LangChain tool-calling with self-correction loops"],link:"https://github.com/seeshuraj"},
@@ -533,6 +532,14 @@
       card.addEventListener('click',()=>window.open(proj.link,'_blank','noopener,noreferrer'));
       card.addEventListener('keydown',(e)=>{if(e.key==='Enter')window.open(proj.link,'_blank','noopener,noreferrer');});
       grid.appendChild(card);
+    });
+
+    /* ✅ FIX: GSAP .project-card animation registered HERE, after cards exist in DOM */
+    mm.add("(prefers-reduced-motion: no-preference)",()=>{
+      gsap.from('.project-card',{
+        opacity:0,y:32,duration:0.6,ease:'power3.out',stagger:0.08,
+        scrollTrigger:{trigger:'#projects',start:'top 82%',once:true}
+      });
     });
 
     /* SMOOTH ANCHOR */
