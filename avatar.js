@@ -2,6 +2,10 @@
  * Seeshuraj Anime Avatar - Voice Chat Controller
  * Pipeline: Web Speech STT -> FastAPI (NVIDIA NIM RAG) -> Azure Neural TTS -> Audio
  * States: idle | listening | thinking | speaking
+ *
+ * FIX: backend returns { answer, audio_base64, latency_ms }
+ *      was incorrectly destructuring { answer_text, audio_base64 }
+ *      which caused history to contain undefined values -> 422 on every turn after first
  */
 (function () {
   'use strict';
@@ -22,7 +26,7 @@
 
   // -- State ----------------------------------------------------------------
   let state        = 'idle';   // idle | listening | thinking | speaking
-  let history      = [];       // [{role, content}]
+  let history      = [];       // [{role, content}]  — sent as List[Message] to FastAPI
   let audioCtx     = null;
   let currentAudio = null;
   let warmedUp     = false;
@@ -37,7 +41,7 @@
         talkBtn.disabled = false;
         break;
       case 'listening':
-        talkBtn.textContent = '\uD83C\uDF9E Listening\u2026';
+        talkBtn.textContent = '\uD83C\uDF99 Listening\u2026';
         talkBtn.disabled = false;
         break;
       case 'thinking':
@@ -100,7 +104,7 @@
   let recognition = null;
 
   if (hasSpeech) {
-    recognition = new SpeechRecognition(); // created ONCE at init
+    recognition = new SpeechRecognition(); // created ONCE at init — never re-created
     recognition.lang = 'en-IE';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
@@ -121,11 +125,13 @@
     };
 
     recognition.onend = () => {
+      // Only reset to idle if we were still in listening state
+      // (not if we already transitioned to thinking via onresult)
       if (state === 'listening') setState('idle');
     };
   }
 
-  // -- Play WAV base64 audio ------------------------------------------------
+  // -- Play base64 audio (WAV/MP3 from Azure TTS) ---------------------------
   async function playAudio(base64wav) {
     try {
       if (!audioCtx) {
@@ -162,33 +168,47 @@
     if (state === 'thinking' || state === 'speaking') return;
 
     setState('thinking');
-    showBubble('...');
+    showBubble('\u2026');
 
     try {
       const res = await fetch(`${API_URL}/api/avatar-chat`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ message: userText, history }),
-        signal:  AbortSignal.timeout(30000),
+        body: JSON.stringify({
+          message: userText,
+          history: history,   // already [{role, content}] — FastAPI accepts List[Message]
+          tts_enabled: true,
+        }),
+        signal: AbortSignal.timeout(30000),
       });
 
-      if (!res.ok) throw new Error(`API ${res.status}`);
-
-      const data = await res.json();
-      const { answer_text, audio_base64 } = data;
-
-      history.push({ role: 'user',      content: userText    });
-      history.push({ role: 'assistant', content: answer_text });
-      if (history.length > MAX_HISTORY * 2) {
-        history = history.slice(-MAX_HISTORY * 2);
+      if (!res.ok) {
+        const errBody = await res.text().catch(() => '');
+        throw new Error(`API ${res.status}: ${errBody}`);
       }
 
-      showBubble(answer_text);
+      const data = await res.json();
 
-      if (audio_base64) {
-        await playAudio(audio_base64);
+      // ✅ CORRECT field name: backend returns { answer, audio_base64, latency_ms }
+      const answerText  = data.answer       || '';
+      const audio_b64   = data.audio_base64 || '';
+
+      // Append to history ONLY with valid strings — prevents 422 on next turn
+      if (answerText) {
+        history.push({ role: 'user',      content: userText  });
+        history.push({ role: 'assistant', content: answerText });
+        if (history.length > MAX_HISTORY * 2) {
+          history = history.slice(-MAX_HISTORY * 2);
+        }
+      }
+
+      showBubble(answerText || 'Hmm, I had no response. Try again!');
+
+      if (audio_b64) {
+        await playAudio(audio_b64);
       } else if (window.speechSynthesis) {
-        const utt = new SpeechSynthesisUtterance(answer_text);
+        // Fallback to browser TTS if Azure TTS not configured
+        const utt = new SpeechSynthesisUtterance(answerText);
         utt.lang = 'en-IE';
         utt.rate = 1.05;
         setState('speaking');
@@ -198,7 +218,7 @@
         setState('idle');
       }
 
-      setTimeout(hideBubble, 4000);
+      setTimeout(hideBubble, 5000);
 
     } catch (err) {
       console.error('Avatar API error:', err);
@@ -208,7 +228,7 @@
     }
   }
 
-  // -- Text input fallback --------------------------------------------------
+  // -- Text input fallback (for browsers without SpeechRecognition) ---------
   function promptTextInput() {
     const userText = window.prompt('Ask me anything about Seeshuraj:');
     if (userText && userText.trim()) sendMessage(userText.trim());
@@ -219,13 +239,13 @@
   talkBtn.addEventListener('click', async () => {
     if (state === 'thinking' || state === 'speaking') return;
 
-    // Stop any ongoing speech
+    // Stop any playing audio
     if (currentAudio) { try { currentAudio.stop(); } catch {} }
     if (window.speechSynthesis) window.speechSynthesis.cancel();
 
     if (!warmedUp) await warmUp();
 
-    // Second click while listening = stop
+    // Second click while listening = cancel
     if (state === 'listening') {
       if (recognition) { try { recognition.stop(); } catch {} }
       setState('idle');
@@ -239,14 +259,15 @@
 
     try {
       setState('listening');
-      recognition.start(); // reuse same singleton instance every time
+      recognition.start(); // reuse singleton — never re-instantiate
     } catch (e) {
-      console.warn('recognition.start() error:', e);
-      if (state !== 'listening') promptTextInput();
+      // Chrome throws if .start() called while recognition already running
+      console.warn('recognition.start() error:', e.message);
+      promptTextInput();
     }
   });
 
-  // -- Keyboard shortcut ----------------------------------------------------
+  // -- Keyboard shortcut (Space / Enter) ------------------------------------
   talkBtn.addEventListener('keydown', (e) => {
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
