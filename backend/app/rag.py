@@ -1,64 +1,106 @@
-"""Keyword-based RAG over Seeshuraj's CV knowledge base."""
+"""
+Keyword-based RAG over Seeshuraj's CV knowledge base.
+No vector DB needed — just structured retrieval.
+"""
 
-KNOWLEDGE_BASE = [
-    {
-        "keywords": ["education", "degree", "msc", "hpc", "trinity", "college", "dublin", "university", "study"],
-        "content": "Seeshuraj holds an MSc in High Performance Computing from Trinity College Dublin (2025-2026) and a PG Diploma in HPC from TCD (2024-2025, 55+ credits). He graduated with a B.Tech in Computer Science."
-    },
-    {
-        "keywords": ["skills", "languages", "programming", "tech", "stack", "python", "c++", "java", "javascript", "typescript", "cuda", "sql"],
-        "content": "Seeshuraj is proficient in Python, C++, Java, JavaScript, TypeScript, CUDA, and SQL. He has hands-on experience with FastAPI, Next.js, React, Node.js, and various web frameworks."
-    },
-    {
-        "keywords": ["cloud", "aws", "azure", "gcp", "render", "vercel", "supabase", "docker", "devops", "deployment"],
-        "content": "Seeshuraj works with Azure, AWS, GCP, Render, Vercel, and Supabase. He has experience with Docker, CI/CD pipelines, and cloud-native deployment of full-stack applications."
-    },
-    {
-        "keywords": ["llm", "ai", "ml", "langchain", "langgraph", "rag", "grok", "openai", "ollama", "evaluation", "llmtestlab"],
-        "content": "Seeshuraj built LLM Test Lab — an AI model evaluation platform with FastAPI backend and Next.js frontend. He has deep experience with LangGraph, RAG pipelines, prompt engineering, and LLM evaluation metrics."
-    },
-    {
-        "keywords": ["projects", "portfolio", "work", "built", "created", "developed"],
-        "content": "Key projects: LLM Test Lab (AI evaluation platform), anime avatar AI chat widget (this!), HPC distributed systems research, full-stack cloud applications. Available on GitHub at github.com/seeshuraj."
-    },
-    {
-        "keywords": ["experience", "job", "work", "internship", "company", "beyond", "jjs", "freelance"],
-        "content": "Seeshuraj worked as a Cloud Engineer at Beyond Youths Solution and as a Freelance Full Stack Developer at JJS Impex, building cloud infrastructure and Python/JavaScript applications."
-    },
-    {
-        "keywords": ["contact", "email", "hire", "available", "open", "looking", "job", "role", "position"],
-        "content": "Seeshuraj is actively looking for graduate/junior Software Engineer roles in Dublin, EU, and remote. Contact: bhoopals@tcd.ie or connect on LinkedIn at linkedin.com/in/seeshuraj-bhoopalan."
-    },
-    {
-        "keywords": ["location", "where", "based", "dublin", "ireland", "eu", "remote"],
-        "content": "Seeshuraj is based in Dublin 18, Ireland. He is open to roles in Dublin, across the EU, remote, and international opportunities."
-    },
-    {
-        "keywords": ["hpc", "parallel", "cuda", "mpi", "openmp", "distributed", "computing", "performance"],
-        "content": "Seeshuraj's MSc focus is High Performance Computing: CUDA GPU programming, MPI/OpenMP distributed systems, parallel algorithm design, and scientific computing."
-    },
-    {
-        "keywords": ["certifications", "certs", "azure", "aws", "certif"],
-        "content": "Seeshuraj holds Microsoft Azure and AWS cloud certifications and has completed multiple professional development courses in cloud architecture and software engineering."
-    },
-]
+KNOWLEDGE_BASE: dict[str, str] = {
+    "identity": """
+Name: Seeshuraj Bhoopalan
+Role: AI & Software Engineer
+Location: Dublin 18, Ireland
+Visa: Stamp 2 (seeking sponsorship)
+Email: bhoopals@tcd.ie
+LinkedIn: linkedin.com/in/seeshurajbhoopalan
+GitHub: github.com/seeshuraj
+Open to: Graduate/Junior SE, AI Engineer, Cloud Engineer roles in Dublin, EU, remote
+    """,
+    "education": """
+PG Diploma in High Performance Computing — Trinity College Dublin (2024–2026, 2:1)
+B.Tech. in Information Technology — St. Joseph's College of Engineering, Anna University (2020–2024, 8.63 CGPA)
+ACM 2023 publication: Multi-modal biometric authentication using CNN + SVM fusion (97.4% accuracy)
+    """,
+    "skills": """
+Languages: Python, TypeScript, C++, JavaScript, Java, SQL, Bash, CUDA C
+ML/AI: PyTorch, LangChain, LangGraph, RAG pipelines, OpenAI API, NVIDIA NIM, Ollama, Hugging Face, Bedrock
+Cloud/DevOps: AWS (Lambda, S3, Glue, RDS, CloudWatch), Azure, Docker, Kubernetes, Jenkins, Terraform, GitHub Actions, CI/CD
+Web/Data: FastAPI, React, Next.js, Node.js, PostgreSQL, MongoDB, Supabase, Redis
+HPC/Systems: CUDA, OpenMP, MPI, Prometheus, Grafana, Linux, OpenCL
+    """,
+    "experience": """
+1. Freelance Full Stack Developer @ JJS Impex (Aug 2025 – Nov 2025)
+   - React frontend + Node.js backend; product catalog & inquiry workflows
+   - Improved lead conversion by 40%; integrated Zoho Workforce
 
-SYSTEM_PROMPT = """You are Seeshuraj Bhoopalan's anime avatar — a friendly, confident AI assistant speaking in first person as Seeshuraj. 
-You are an AI & Software Engineer with an MSc in High Performance Computing from Trinity College Dublin.
-You are concise, direct, and warm. Keep responses to 2-4 sentences. Never mention you are an AI language model — you are Seeshuraj's digital avatar.
-Use the context provided to answer questions about skills, projects, experience, education, and availability."""
+2. Cloud Engineer @ Beyond Youth's Solution (Apr 2024 – Jun 2025)
+   - Designed scalable AWS infrastructure with SLOs/SLIs, 99.9% uptime
+   - Automated ETL pipelines; CI/CD with Docker + Jenkins (40% faster release cycles)
+   - Observability stack: CloudWatch, distributed tracing, postmortems/RCAs
 
+3. Backend Developer Intern @ Lyft (Jan 2023 – Jun 2023)
+   - High-throughput Flask APIs: 1M+ transactions/day
+   - Microservices +30% reliability; MongoDB/PostgreSQL -25% query latency
+
+4. Web Developer Intern @ Tranz Mannequins (Apr 2022 – Oct 2022)
+   - Django e-commerce platform; +50% sales; payment gateway integration
+    """,
+    "projects": """
+1. LLM Test Lab — Full-stack LLM evaluation platform
+   Stack: FastAPI, Next.js, Python, Supabase, Docker
+   Features: Multi-model benchmarking (OpenAI, Anthropic, Ollama), latency/accuracy/cost metrics
+
+2. AI Anime Avatar API — This avatar!
+   Stack: FastAPI, NVIDIA NIM (DeepSeek), Azure Neural TTS, RAG
+   Deployed on Render; answers questions about CV in character
+
+3. HPC Benchmarking Suite — CUDA + OpenMP + MPI benchmarks on Trinity HPC cluster
+   Stack: CUDA, OpenMP, MPI, Python, Prometheus/Grafana dashboards
+
+4. Cloud ETL Pipeline — Serverless on AWS
+   Stack: Lambda, S3, Glue, RDS, Terraform; schema validation, dead-letter queues
+
+5. Multi-Modal Biometric Auth — ACM 2023 published research
+   CNN + SVM ensemble; fingerprint + face fusion; 97.4% accuracy cross-dataset
+
+6. Portfolio + Anime Avatar — This site!
+   Stack: HTML/CSS, GSAP, Lenis, Web Speech API, NVIDIA NIM, Azure TTS
+    """,
+    "certifications": """
+AWS Certified Solutions Architect — Associate (2024)
+Microsoft Azure Fundamentals AZ-900 (2024)
+Deep Learning Specialization — DeepLearning.AI / Coursera (2023)
+Python for Data Science and AI — IBM / Coursera (2022)
+    """,
+    "goals": """
+Seeking: Graduate/Junior Software Engineer, AI Engineer, Cloud/Data Engineer roles
+Target companies: Bloomberg, Amazon, Microsoft, Stripe, Palantir, Google, Oracle, IBM
+Locations: Dublin (preferred), EU, remote, UAE, Australia, Canada
+Available immediately. Requires visa sponsorship for most countries.
+    """,
+}
+
+KEYWORD_MAP: dict[str, list[str]] = {
+    "identity":      ["name", "who", "yourself", "about", "seeshuraj", "contact", "email", "location", "dublin", "visa", "linkedin", "github"],
+    "education":     ["study", "degree", "university", "college", "trinity", "hpc", "diploma", "btech", "anna", "acm", "research", "published", "publication"],
+    "skills":        ["skill", "language", "technology", "stack", "python", "cuda", "pytorch", "react", "aws", "azure", "docker", "kubernetes", "fastapi", "typescript", "c++", "sql", "mpi", "openmp", "llm", "rag", "langchain"],
+    "experience":    ["experience", "work", "job", "lyft", "beyond", "jjs", "tranz", "engineer", "intern", "cloud", "backend", "developer", "role"],
+    "projects":      ["project", "build", "built", "llm test", "avatar", "etl", "pipeline", "biometric", "benchmark", "portfolio", "hpc", "shipped"],
+    "certifications":["cert", "certif", "aws", "azure", "coursera", "deeplearning", "ibm", "credential"],
+    "goals":         ["goal", "looking for", "open to", "hire", "job", "role", "target", "seek", "available", "sponsor", "visa", "relocat"],
+}
 
 def retrieve(query: str, top_k: int = 3) -> str:
-    """Simple keyword overlap retrieval."""
-    query_words = set(query.lower().split())
-    scored = []
-    for doc in KNOWLEDGE_BASE:
-        overlap = len(query_words & set(doc["keywords"]))
-        if overlap > 0:
-            scored.append((overlap, doc["content"]))
-    scored.sort(reverse=True)
-    if not scored:
-        # Return general context if no keyword match
-        return KNOWLEDGE_BASE[6]["content"]  # contact/availability
-    return "\n".join(c for _, c in scored[:top_k])
+    """Return the most relevant knowledge base sections for a query."""
+    q = query.lower()
+    scores: dict[str, int] = {k: 0 for k in KNOWLEDGE_BASE}
+    for section, keywords in KEYWORD_MAP.items():
+        for kw in keywords:
+            if kw in q:
+                scores[section] += 1
+    # Always include identity for grounding
+    scores["identity"] = max(scores["identity"], 1)
+    ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    selected = [KNOWLEDGE_BASE[sec] for sec, score in ranked[:top_k] if score > 0]
+    if not selected:
+        # fallback: return identity + skills
+        selected = [KNOWLEDGE_BASE["identity"], KNOWLEDGE_BASE["skills"]]
+    return "\n---\n".join(selected).strip()

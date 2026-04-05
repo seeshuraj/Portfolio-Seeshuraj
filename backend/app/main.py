@@ -1,64 +1,80 @@
-"""FastAPI app — Seeshuraj Anime Avatar API."""
-import time
-import logging
-from typing import List, Dict, Optional
+"""
+FastAPI entry point for the AI Anime Avatar backend.
 
-from fastapi import FastAPI
+Endpoints:
+  GET  /health              — Render health check
+  POST /api/avatar-chat     — Main chat + TTS endpoint
+"""
+import base64
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from app.config import settings
-from app.llm import generate_response
-from app.tts import synthesize
+from .config import get_settings
+from .rag import retrieve
+from .llm import chat
+from .tts import synthesise
 
-logging.basicConfig(level=logging.INFO)
+settings = get_settings()
 
 app = FastAPI(
     title="Seeshuraj Avatar API",
-    description="AI avatar backend: RAG + NVIDIA NIM LLM + Azure TTS",
-    version="1.1.0",
+    description="RAG-powered anime avatar for Seeshuraj's portfolio",
+    version="1.0.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
-    allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
 )
 
 
 class ChatRequest(BaseModel):
     message: str
-    history: Optional[List[Dict]] = []
+    history: list[dict] = []
 
 
 class ChatResponse(BaseModel):
     answer_text: str
-    audio_base64: Optional[str] = None
-    latency_ms: int
-
-
-@app.get("/")
-async def root():
-    return {"message": "Seeshuraj Avatar API is running. Use POST /api/avatar-chat"}
+    audio_base64: str | None = None
+    latency_ms: float
 
 
 @app.get("/health")
 async def health():
-    return {
-        "status": "ok",
-        "model": "meta/llama-3.3-70b-instruct",
-        "tts": bool(settings.speech_key),
-        "llm": bool(settings.nvidia_api_key),
-    }
+    return {"status": "ok", "service": "seeshuraj-avatar-api"}
 
 
 @app.post("/api/avatar-chat", response_model=ChatResponse)
 async def avatar_chat(req: ChatRequest):
-    t0 = time.monotonic()
-    answer = await generate_response(req.message, req.history or [])
-    audio = await synthesize(answer)
-    latency = int((time.monotonic() - t0) * 1000)
-    logging.info("[chat] done latency=%dms audio=%s", latency, bool(audio))
-    return ChatResponse(answer_text=answer, audio_base64=audio, latency_ms=latency)
+    if not req.message.strip():
+        raise HTTPException(status_code=422, detail="message cannot be empty")
+    if len(req.message) > 500:
+        raise HTTPException(status_code=422, detail="message too long (max 500 chars)")
+
+    # 1. RAG retrieval
+    context = retrieve(req.message)
+
+    # 2. LLM
+    try:
+        answer, latency_ms = chat(req.message, context, req.history)
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"LLM error: {exc}")
+
+    # 3. TTS (optional — won't crash if Azure keys missing)
+    audio_b64: str | None = None
+    try:
+        wav_bytes = synthesise(answer)
+        if wav_bytes:
+            audio_b64 = base64.b64encode(wav_bytes).decode()
+    except Exception:
+        pass  # TTS failure is non-fatal
+
+    return ChatResponse(
+        answer_text=answer,
+        audio_base64=audio_b64,
+        latency_ms=latency_ms,
+    )

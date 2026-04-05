@@ -1,84 +1,54 @@
-"""NVIDIA NIM LLM wrapper — meta/llama-3.3-70b-instruct via OpenAI-compat API."""
-import logging
-from typing import List, Dict
+"""
+NVIDIA NIM chat via OpenAI-compatible SDK.
+Persona: Seeshuraj's anime avatar — first-person, concise, warm.
+"""
+import time
+from openai import OpenAI
+from .config import get_settings
 
-from app.config import settings
-from app.rag import SYSTEM_PROMPT, retrieve
+SYSTEM_PROMPT = """
+You are the AI avatar of Seeshuraj Bhoopalan — an MSc HPC graduate from Trinity College Dublin
+and an AI & Software Engineer based in Dublin, Ireland.
 
-logger = logging.getLogger(__name__)
+Personality:
+- Speak in first person as Seeshuraj ("I built...", "My experience is...")
+- Warm, confident, technically sharp — like a senior engineer in a friendly 1-on-1
+- Keep answers concise (2–4 sentences max) unless asked for detail
+- If asked something outside your knowledge base, say "That's not in my CV, but feel free to email me at bhoopals@tcd.ie!"
+- Never make up facts. Only answer from the provided context.
 
-FALLBACK = (
-    "Hi! I'm Seeshuraj's anime avatar. My AI backbone is warming up — "
-    "ask me again in a moment, or email bhoopals@tcd.ie directly!"
-)
-
-try:
-    from openai import OpenAI
-    _client: OpenAI | None = None
-
-    def _get_client() -> OpenAI:
-        global _client
-        if _client is None:
-            _client = OpenAI(
-                api_key=settings.nvidia_api_key,
-                base_url="https://integrate.api.nvidia.com/v1",
-            )
-        return _client
-except ImportError:
-    _get_client = None  # type: ignore
+You are currently running as an animated anime avatar on Seeshuraj's portfolio website.
+Answer questions about his background, skills, projects, experience, and career goals.
+""".strip()
 
 
-async def generate_response(message: str, history: List[Dict]) -> str:
-    """Generate a response using NVIDIA NIM with RAG context."""
-    if not settings.nvidia_api_key or _get_client is None:
-        logger.warning("[llm] NVIDIA_API_KEY not set or openai not installed")
-        return FALLBACK
+def chat(user_message: str, context: str, history: list[dict]) -> tuple[str, float]:
+    """
+    Returns (reply_text, latency_ms).
+    history: list of {role: 'user'|'assistant', content: str}
+    """
+    settings = get_settings()
+    client = OpenAI(
+        api_key=settings.nvidia_api_key,
+        base_url=settings.nvidia_base_url,
+    )
 
-    context = retrieve(message)
-    logger.info("[llm] context len=%d", len(context))
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": f"Relevant context from Seeshuraj's CV:\n{context}"},
+    ]
+    # Append last 4 turns of history to maintain short-term memory
+    for turn in history[-4:]:
+        messages.append(turn)
+    messages.append({"role": "user", "content": user_message})
 
-    # Keep system + context short so the model stays within max_tokens
-    system = SYSTEM_PROMPT + f"\n\n# Context\n{context}"
-
-    messages: List[Dict] = [{"role": "system", "content": system}]
-    for turn in history[-4:]:          # last 2 exchanges only
-        messages.append({"role": turn["role"], "content": turn["content"]})
-    messages.append({"role": "user", "content": message})
-
-    try:
-        client = _get_client()
-        resp = client.chat.completions.create(
-            model="meta/llama-3.3-70b-instruct",
-            messages=messages,
-            max_tokens=200,
-            temperature=0.65,
-            top_p=0.9,
-            stream=False,
-        )
-
-        choice = resp.choices[0]
-        text: str | None = None
-
-        # NVIDIA NIM sometimes returns content in message.content
-        # and sometimes in delta.content (even on non-streaming)
-        if choice.message and choice.message.content:
-            text = choice.message.content.strip()
-        elif hasattr(choice, "delta") and choice.delta and choice.delta.content:
-            text = choice.delta.content.strip()
-
-        logger.info(
-            "[llm] finish_reason=%s text_len=%s preview=%s",
-            choice.finish_reason,
-            len(text) if text else 0,
-            (text[:60] + "…") if text and len(text) > 60 else text,
-        )
-
-        if not text:
-            logger.warning("[llm] empty response — returning fallback")
-            return FALLBACK
-
-        return text
-
-    except Exception as exc:
-        logger.error("[llm] exception: %s", exc, exc_info=True)
-        return FALLBACK
+    t0 = time.perf_counter()
+    response = client.chat.completions.create(
+        model=settings.nvidia_model,
+        messages=messages,
+        max_tokens=256,
+        temperature=0.7,
+    )
+    latency_ms = (time.perf_counter() - t0) * 1000
+    reply = response.choices[0].message.content.strip()
+    return reply, round(latency_ms, 1)

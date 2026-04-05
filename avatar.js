@@ -1,226 +1,247 @@
-/* ═══ ANIME AVATAR AI CHAT WIDGET ═══
-   Pipeline: Web Speech API STT → backend /api/avatar-chat → base64 WAV → play
-   Cold-start fix: fires a /health wake-ping on page load, shows a toast while warming up.
-*/
+/**
+ * Seeshuraj Anime Avatar — Voice Chat Controller
+ * Pipeline: Web Speech STT → FastAPI (NVIDIA NIM RAG) → Azure Neural TTS → Audio
+ * States: idle | listening | thinking | speaking
+ */
 (function () {
   'use strict';
 
-  const API_URL  = (window.__AVATAR_API_URL || '').replace(/\/$/, '');
-  const MAX_HIST = 8;
+  // ── Config ───────────────────────────────────────────────────────────────
+  const API_URL = (window.__AVATAR_API_URL || 'https://seeshuraj-avatar-api.onrender.com').replace(/\/$/, '');
+  const MAX_HISTORY = 6; // turns to keep in memory
 
-  let wrap, bubble, btn, micNote, warmupToast;
-  let state       = 'idle';
-  let history     = [];
-  let recognition = null;
-  let audioCtx    = null;
-  let currentSrc  = null;
-  let apiReady    = !API_URL; // true immediately if no API (offline mode)
+  // ── DOM refs ─────────────────────────────────────────────────────────────
+  const talkBtn   = document.getElementById('animeTalkBtn');
+  const bubble    = document.getElementById('avatarBubble');
+  const animeWrap = document.getElementById('animeWrap');
+  const warmupBar = document.getElementById('apiWarmup');
+  const warmupMsg = document.getElementById('apiWarmupMsg');
 
-  // ── Offline fallback ─────────────────────────────────────────────────────
-  const OFFLINE = [
-    "Hi! I'm Seeshuraj's anime avatar. My backend isn't connected yet — but I can tell you I'm an AI & Software Engineer with an MSc in HPC from Trinity College Dublin.",
-    "I specialise in LLM-powered apps, cloud infrastructure, and full-stack development. Check my projects section!",
-    "I'm actively looking for graduate / junior SWE roles in Dublin, EU, and remote. Drop me an email at bhoopals@tcd.ie!",
-    "I've worked with LangGraph, FastAPI, Next.js, AWS, Azure, CUDA, and more. What would you like to know?",
-  ];
-  let offlineIdx = 0;
+  if (!talkBtn || !animeWrap) return; // avatar not on this page
 
-  // ── Wake-ping: hit /health on page load to beat Render cold start ─────────
-  function warmUp() {
-    if (!API_URL) return;
-    warmupToast = document.getElementById('apiWarmup');
-    // Show toast only after 2s (don't flash it if API is already warm)
-    const toastTimer = setTimeout(() => {
-      if (!apiReady && warmupToast) warmupToast.classList.add('show');
-    }, 2000);
+  // ── State ────────────────────────────────────────────────────────────────
+  let state        = 'idle';      // idle | listening | thinking | speaking
+  let history      = [];          // [{role, content}]
+  let recognition  = null;
+  let audioCtx     = null;
+  let currentAudio = null;
+  let warmedUp     = false;
 
-    fetch(API_URL + '/health', { method: 'GET', signal: AbortSignal.timeout(35000) })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(() => {
-        apiReady = true;
-        clearTimeout(toastTimer);
-        if (warmupToast) warmupToast.classList.remove('show');
-        console.log('[avatar] API ready');
-      })
-      .catch(err => {
-        console.warn('[avatar] warm-up failed', err);
-        apiReady = true; // allow attempts anyway — API might respond to chat even if health timed out
-        clearTimeout(toastTimer);
-        if (warmupToast) warmupToast.classList.remove('show');
-      });
-  }
-
-  // ── State helpers ─────────────────────────────────────────────────────────
+  // ── State machine ────────────────────────────────────────────────────────
   function setState(s) {
-    if (!wrap) return;
-    ['idle','listening','thinking','speaking'].forEach(c => wrap.classList.remove('avatar-state-'+c));
-    wrap.classList.add('avatar-state-'+s);
     state = s;
+    animeWrap.dataset.avatarState = s;
+    switch (s) {
+      case 'idle':      talkBtn.textContent = 'Talk to Seeshuraj'; talkBtn.disabled = false; break;
+      case 'listening': talkBtn.textContent = '🎤 Listening…';     talkBtn.disabled = false; break;
+      case 'thinking':  talkBtn.textContent = '⏳ Thinking…';      talkBtn.disabled = true;  break;
+      case 'speaking':  talkBtn.textContent = '🔊 Speaking…';      talkBtn.disabled = true;  break;
+    }
   }
 
-  function showBubble(html) {
+  // ── Speech bubble ────────────────────────────────────────────────────────
+  function showBubble(text) {
     if (!bubble) return;
-    bubble.innerHTML = html;
+    bubble.textContent = text;
     bubble.classList.add('visible');
   }
-
   function hideBubble() {
     if (!bubble) return;
     bubble.classList.remove('visible');
+    setTimeout(() => { bubble.textContent = ''; }, 400);
   }
 
-  function thinkingHTML() {
-    return '<span class="thinking-dots"><span></span><span></span><span></span></span>';
+  // ── Warmup toast ─────────────────────────────────────────────────────────
+  function showWarmup(msg) {
+    if (!warmupBar) return;
+    if (warmupMsg) warmupMsg.textContent = msg;
+    warmupBar.classList.add('show');
+  }
+  function hideWarmup() {
+    if (!warmupBar) return;
+    warmupBar.classList.remove('show');
   }
 
-  // ── Audio ─────────────────────────────────────────────────────────────────
-  function playBase64Wav(b64) {
-    return new Promise((resolve) => {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const bytes = atob(b64);
-        const buf   = new Uint8Array(bytes.length);
-        for (let i = 0; i < bytes.length; i++) buf[i] = bytes.charCodeAt(i);
-        audioCtx.decodeAudioData(buf.buffer, (decoded) => {
-          if (currentSrc) { try { currentSrc.stop(); } catch(e) {} }
-          currentSrc = audioCtx.createBufferSource();
-          currentSrc.buffer = decoded;
-          currentSrc.connect(audioCtx.destination);
-          currentSrc.onended = resolve;
-          currentSrc.start(0);
-        }, resolve);
-      } catch (e) {
-        console.warn('[avatar] audio error', e);
-        resolve();
-      }
-    });
-  }
-
-  // ── API call ──────────────────────────────────────────────────────────────
-  async function queryBackend(userMsg) {
-    if (!API_URL) {
-      const ans = OFFLINE[offlineIdx % OFFLINE.length];
-      offlineIdx++;
-      await new Promise(r => setTimeout(r, 700));
-      return { answer_text: ans, audio_base64: null };
-    }
-
-    // If API is still waking up, wait for it (up to 35s)
-    if (!apiReady) {
-      showBubble('⏳ Waking up the server… (~15s first load)');
-      await new Promise(resolve => {
-        const iv = setInterval(() => { if (apiReady) { clearInterval(iv); resolve(); } }, 300);
-        setTimeout(() => { clearInterval(iv); resolve(); }, 35000);
-      });
-      showBubble(thinkingHTML());
-    }
-
-    const res = await fetch(API_URL + '/api/avatar-chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userMsg, history: history.slice(-MAX_HIST) }),
-      signal: AbortSignal.timeout(60000),
-    });
-    if (!res.ok) throw new Error('API ' + res.status);
-    return res.json();
-  }
-
-  // ── Chat handler ──────────────────────────────────────────────────────────
-  async function handleUserInput(text) {
-    if (!text.trim()) return;
-    history.push({ role: 'user', content: text });
-    setState('thinking');
-    showBubble(thinkingHTML());
+  // ── Ping backend to warm up Render free instance ─────────────────────────
+  async function warmUp() {
+    if (warmedUp) return;
     try {
-      const data   = await queryBackend(text);
-      const answer = data.answer_text || '...';
-      history.push({ role: 'assistant', content: answer });
-      setState('speaking');
-      showBubble(answer);
-      if (data.audio_base64) {
-        await playBase64Wav(data.audio_base64);
-      } else {
-        await new Promise(r => setTimeout(r, Math.min(answer.length * 55, 6000)));
+      showWarmup('Waking up AI avatar…');
+      const r = await fetch(`${API_URL}/health`, { signal: AbortSignal.timeout(15000) });
+      if (r.ok) {
+        warmedUp = true;
+        showWarmup('Avatar is ready ✓');
+        setTimeout(hideWarmup, 2000);
       }
-    } catch (err) {
-      console.warn('[avatar] query error', err);
-      showBubble('Hmm, something went wrong. Try again?');
-      await new Promise(r => setTimeout(r, 3000));
+    } catch {
+      hideWarmup();
     }
-    setState('idle');
-    hideBubble();
-    btn.classList.remove('active');
-    if (micNote) micNote.textContent = '';
   }
 
-  // ── Speech recognition ────────────────────────────────────────────────────
-  function buildRecognition() {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) return null;
-    const r = new SR();
-    r.lang = 'en-US'; r.interimResults = false; r.maxAlternatives = 1;
+  // Warm up when user hovers the avatar section
+  animeWrap.addEventListener('mouseenter', warmUp, { once: true });
+  animeWrap.addEventListener('touchstart', warmUp, { once: true, passive: true });
+
+  // ── Web Speech API setup ─────────────────────────────────────────────────
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const hasSpeech = !!SpeechRecognition;
+
+  function setupRecognition() {
+    if (!hasSpeech) return null;
+    const r = new SpeechRecognition();
+    r.lang = 'en-IE';
+    r.interimResults = false;
+    r.maxAlternatives = 1;
+    r.continuous = false;
     r.onresult = (e) => {
-      const t = e.results[0][0].transcript;
-      if (micNote) micNote.textContent = '"' + t + '"';
-      stopListening();
-      handleUserInput(t);
+      const transcript = e.results[0][0].transcript.trim();
+      if (transcript) sendMessage(transcript);
     };
     r.onerror = (e) => {
-      console.warn('[avatar] STT error', e.error);
-      stopListening();
-      const typed = prompt('Type your question for Seeshuraj:');
-      if (typed) handleUserInput(typed);
+      console.warn('Speech recognition error:', e.error);
+      if (e.error === 'not-allowed') {
+        showBubble('Microphone access denied. Please allow mic and try again.');
+        setTimeout(hideBubble, 4000);
+      }
+      setState('idle');
     };
-    r.onend = () => { if (state === 'listening') setState('idle'); };
+    r.onend = () => {
+      if (state === 'listening') setState('idle');
+    };
     return r;
   }
 
-  function startListening() {
-    if (!recognition) recognition = buildRecognition();
-    if (!recognition) {
-      const typed = prompt('Type your question for Seeshuraj:');
-      if (typed) handleUserInput(typed);
+  // ── Play WAV base64 audio ─────────────────────────────────────────────────
+  async function playAudio(base64wav) {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+      const binary = atob(base64wav);
+      const bytes  = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+      const buffer = await audioCtx.decodeAudioData(bytes.buffer);
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(audioCtx.destination);
+
+      currentAudio = source;
+      setState('speaking');
+
+      await new Promise((resolve) => {
+        source.onended = resolve;
+        source.start(0);
+      });
+    } catch (err) {
+      console.warn('Audio playback error:', err);
+    } finally {
+      currentAudio = null;
+      setState('idle');
+    }
+  }
+
+  // ── Core: send message to backend ────────────────────────────────────────
+  async function sendMessage(userText) {
+    if (state === 'thinking' || state === 'speaking') return;
+
+    setState('thinking');
+    showBubble('...');
+
+    try {
+      const res = await fetch(`${API_URL}/api/avatar-chat`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ message: userText, history }),
+        signal:  AbortSignal.timeout(30000),
+      });
+
+      if (!res.ok) throw new Error(`API ${res.status}`);
+
+      const data = await res.json();
+      const { answer_text, audio_base64 } = data;
+
+      // Update conversation history
+      history.push({ role: 'user',      content: userText     });
+      history.push({ role: 'assistant', content: answer_text  });
+      if (history.length > MAX_HISTORY * 2) history = history.slice(-MAX_HISTORY * 2);
+
+      showBubble(answer_text);
+
+      if (audio_base64) {
+        await playAudio(audio_base64);
+      } else {
+        // Fallback: browser TTS if Azure not configured
+        if (window.speechSynthesis) {
+          const utt = new SpeechSynthesisUtterance(answer_text);
+          utt.lang = 'en-IE';
+          utt.rate = 1.05;
+          setState('speaking');
+          window.speechSynthesis.speak(utt);
+          utt.onend = () => setState('idle');
+        } else {
+          setState('idle');
+        }
+      }
+
+      // Hide bubble 4s after speaking ends
+      setTimeout(hideBubble, 4000);
+
+    } catch (err) {
+      console.error('Avatar API error:', err);
+      showBubble('Sorry, I had trouble connecting. Try again!');
+      setTimeout(hideBubble, 3500);
+      setState('idle');
+    }
+  }
+
+  // ── Text input fallback (if no mic / browser doesn't support STT) ─────────
+  function promptTextInput() {
+    const userText = window.prompt('Ask me anything about Seeshuraj:');
+    if (userText && userText.trim()) sendMessage(userText.trim());
+    else setState('idle');
+  }
+
+  // ── Talk button click ────────────────────────────────────────────────────
+  talkBtn.addEventListener('click', async () => {
+    if (state === 'thinking' || state === 'speaking') return;
+
+    // Stop any ongoing speech
+    if (currentAudio) { try { currentAudio.stop(); } catch {} }
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+    // Warm up backend on first real click
+    if (!warmedUp) await warmUp();
+
+    if (state === 'listening') {
+      if (recognition) recognition.stop();
+      setState('idle');
       return;
     }
-    setState('listening');
-    showBubble('Listening…');
-    if (micNote) micNote.textContent = 'Speak now…';
-    try { recognition.start(); } catch(e) {}
-  }
 
-  function stopListening() {
-    try { if (recognition) recognition.stop(); } catch(e) {}
-  }
-
-  // ── Button ────────────────────────────────────────────────────────────────
-  function onTalkClick() {
-    if (state === 'thinking' || state === 'speaking') return;
-    if (state === 'listening') {
-      stopListening(); setState('idle'); hideBubble();
-      btn.classList.remove('active'); return;
+    if (!hasSpeech) {
+      promptTextInput();
+      return;
     }
-    btn.classList.add('active');
-    startListening();
-  }
 
-  // ── Init ──────────────────────────────────────────────────────────────────
-  function init() {
-    wrap    = document.querySelector('.anime-wrap');
-    bubble  = document.getElementById('avatarBubble');
-    btn     = document.getElementById('animeTalkBtn');
-    micNote = document.getElementById('avatarMicNote');
-    if (!wrap || !btn) return;
-    setState('idle');
-    btn.addEventListener('click', onTalkClick);
-    const img = wrap.querySelector('.anime-avatar');
-    if (img) img.addEventListener('click', onTalkClick);
-    warmUp(); // fire /health ping immediately on page load
-    console.log('[avatar] ready. API:', API_URL || '(offline mode)');
-  }
+    recognition = setupRecognition();
+    try {
+      setState('listening');
+      recognition.start();
+    } catch {
+      promptTextInput();
+    }
+  });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // ── Keyboard shortcut: Space bar triggers avatar (when focused) ───────────
+  talkBtn.addEventListener('keydown', (e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      talkBtn.click();
+    }
+  });
+
+  // Init
+  setState('idle');
+  console.log('[Avatar] Initialised. API:', API_URL);
 })();
