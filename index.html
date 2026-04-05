@@ -199,25 +199,31 @@
     .skills-tab:hover{border-color:oklch(from var(--color-primary) l c h/0.4);color:var(--color-primary);}
     .skills-tab.active{background:var(--color-primary-highlight);border-color:oklch(from var(--color-primary) l c h/0.5);color:var(--color-primary);}
 
-    /* Bento grid — all 5 cards equal width */
+    /* ── Bento grid — all 5 cards equal height ── */
     .skills-bento{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:var(--space-3);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      /* stretch makes every cell fill the row height equally */
+      align-items: stretch;
+      gap: var(--space-3);
     }
     @media(max-width:1280px){.skills-bento{grid-template-columns:repeat(3,1fr);}}
     @media(max-width:900px){.skills-bento{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:480px){.skills-bento{grid-template-columns:1fr;}}
 
     .skill-card{
-      background:var(--color-surface);
-      border:1px solid oklch(from var(--color-text) l c h/0.08);
-      border-radius:var(--radius-xl);
-      padding:var(--space-4);
-      display:flex;flex-direction:column;gap:var(--space-3);
-      transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive),transform var(--transition-interactive),background var(--transition-interactive);
-      cursor:default;
-      position:relative;overflow:hidden;
+      background: var(--color-surface);
+      border: 1px solid oklch(from var(--color-text) l c h/0.08);
+      border-radius: var(--radius-xl);
+      /* uniform padding on all cards */
+      padding: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      transition: border-color var(--transition-interactive),box-shadow var(--transition-interactive),transform var(--transition-interactive),background var(--transition-interactive);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
     }
     .skill-card::before{
       content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
@@ -239,16 +245,40 @@
       box-shadow:0 0 12px var(--color-primary-glow);
     }
     .skill-card-title{font-size:var(--text-xs);font-weight:700;color:var(--color-primary);letter-spacing:0.08em;text-transform:uppercase;}
-    .skill-pills{display:flex;flex-wrap:wrap;gap:5px;}
-    .s-pill{
-      padding:3px var(--space-3);
-      border:1px solid oklch(from var(--color-text) l c h/0.10);
+
+    /* ── Pills wrapper — fixed height so ALL cards match ── */
+    .skill-pills{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      /* cap pill area height so ML & LLMs doesn't blow out the row */
+      max-height: 148px;
+      overflow-y: auto;
+      /* subtle scrollbar styling */
+      scrollbar-width: thin;
+      scrollbar-color: oklch(from var(--color-primary) l c h/0.3) transparent;
+    }
+    .skill-pills::-webkit-scrollbar{width:3px;}
+    .skill-pills::-webkit-scrollbar-track{background:transparent;}
+    .skill-pills::-webkit-scrollbar-thumb{
+      background:oklch(from var(--color-primary) l c h/0.3);
       border-radius:var(--radius-full);
-      font-size:var(--text-xs);font-weight:500;
-      color:var(--color-text-muted);
-      background:var(--color-surface-2);
-      transition:all var(--transition-interactive);
-      white-space:nowrap;
+    }
+    .skill-pills::-webkit-scrollbar-thumb:hover{
+      background:oklch(from var(--color-primary) l c h/0.6);
+    }
+
+    .s-pill{
+      /* identical padding on every pill */
+      padding: 4px var(--space-3);
+      border: 1px solid oklch(from var(--color-text) l c h/0.10);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      background: var(--color-surface-2);
+      transition: all var(--transition-interactive);
+      white-space: nowrap;
     }
     .s-pill:hover{
       border-color:oklch(from var(--color-primary) l c h/0.5);
