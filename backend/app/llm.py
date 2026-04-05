@@ -1,5 +1,4 @@
-"""Grok (xAI) LLM wrapper."""
-import os
+"""NVIDIA NIM LLM wrapper — meta/llama-3.3-70b-instruct via OpenAI-compat API."""
 from typing import List, Dict
 
 from app.config import settings
@@ -13,8 +12,8 @@ try:
         global _client
         if _client is None:
             _client = OpenAI(
-                api_key=settings.xai_api_key,
-                base_url="https://api.x.ai/v1",
+                api_key=settings.nvidia_api_key,
+                base_url="https://integrate.api.nvidia.com/v1",
             )
         return _client
 except ImportError:
@@ -22,9 +21,13 @@ except ImportError:
 
 
 async def generate_response(message: str, history: List[Dict]) -> str:
-    """Generate a response from Grok with RAG context."""
-    if not settings.xai_api_key or _get_client is None:
-        return "I'm Seeshuraj's anime avatar! My AI backend isn't configured yet, but I can tell you I'm actively looking for Software Engineer roles in Dublin and EU. Email me at bhoopals@tcd.ie!"
+    """Generate a response using NVIDIA NIM with RAG context."""
+    if not settings.nvidia_api_key or _get_client is None:
+        return (
+            "I'm Seeshuraj's anime avatar! My AI backend isn't configured yet — "
+            "but I'm actively looking for Software Engineer roles in Dublin and EU. "
+            "Email me at bhoopals@tcd.ie!"
+        )
 
     context = retrieve(message)
     system = SYSTEM_PROMPT + f"\n\nRelevant context:\n{context}"
@@ -36,7 +39,7 @@ async def generate_response(message: str, history: List[Dict]) -> str:
 
     client = _get_client()
     response = client.chat.completions.create(
-        model="grok-3-fast-beta",
+        model="meta/llama-3.3-70b-instruct",
         messages=messages,
         max_tokens=180,
         temperature=0.7,
