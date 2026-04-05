@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,27 +9,27 @@
   <meta property="og:description" content="PG Diploma HPC, Trinity College Dublin. Open to grad/junior roles in Dublin, EU &amp; remote.">
   <meta property="og:type" content="website">
 
-  <!-- Tab favicon — inline SVG diamond+circuit mark -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a09'/%3E%3Cpath d='M16 4 L28 16 L16 28 L4 16 Z' stroke='%2300d4e0' stroke-width='2' fill='none'/%3E%3Ccircle cx='16' cy='16' r='3.5' fill='%2300d4e0'/%3E%3Ccircle cx='16' cy='4' r='1.5' fill='%2300d4e0' opacity='0.6'/%3E%3Ccircle cx='28' cy='16' r='1.5' fill='%2300d4e0' opacity='0.6'/%3E%3Ccircle cx='16' cy='28' r='1.5' fill='%2300d4e0' opacity='0.6'/%3E%3Ccircle cx='4' cy='16' r='1.5' fill='%2300d4e0' opacity='0.6'/%3E%3C/svg%3E">
+  <!-- Tab favicon — glowing {} code mark -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a09'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' font-size='17' font-family='monospace' font-weight='bold' fill='%2300d4e0'%3E%7B%7D%3C/text%3E%3C/svg%3E">
 
   <!-- Fonts -->
   <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
 
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-  <!-- Lenis smooth scroll -->
+  <!-- GSAP + ScrollTrigger + Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  <!-- Lucide icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
-  <!-- Avatar widget styles -->
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Avatar CSS -->
   <link rel="stylesheet" href="./avatar.css">
 
   <style>
     :root {
       --font-display: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
-      --font-body:    'Satoshi', 'Inter', sans-serif;
+      --font-body: 'Satoshi', 'Inter', sans-serif;
       --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
       --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
       --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
@@ -134,9 +134,9 @@
     .scroll-hint{position:absolute;bottom:var(--space-6);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--space-2);color:var(--color-text-faint);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;z-index:2;}
     .scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--color-primary),transparent);animation:scroll-drop 2.2s ease-in-out infinite;}
     @keyframes scroll-drop{0%{transform:scaleY(0);transform-origin:top;opacity:0;}40%{transform:scaleY(1);transform-origin:top;opacity:1;}60%{transform:scaleY(1);transform-origin:bottom;opacity:1;}100%{transform:scaleY(0);transform-origin:bottom;opacity:0;}}
-
-    /* Hero photo frame */
-    .hero-photo-frame{position:relative;width:min(420px,92vw);aspect-ratio:4/5;border-radius:var(--radius-2xl);overflow:hidden;border:1px solid oklch(from var(--color-primary) l c h/0.25);box-shadow:0 0 64px var(--color-primary-glow);}
+    /* Hero photo frame — pulse glow */
+    .hero-photo-frame{position:relative;width:min(420px,92vw);aspect-ratio:4/5;border-radius:var(--radius-2xl);overflow:hidden;border:1px solid oklch(from var(--color-primary) l c h/0.25);box-shadow:0 0 64px var(--color-primary-glow);animation:frame-pulse 4s ease-in-out infinite;}
+    @keyframes frame-pulse{0%,100%{box-shadow:0 0 40px var(--color-primary-glow);}50%{box-shadow:0 0 90px var(--color-primary-glow),0 0 140px color-mix(in oklch,var(--color-primary) 6%,transparent);}}
     .hero-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;}
     .hero-photo-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,color-mix(in oklch,var(--color-bg) 55%,transparent) 0%,transparent 55%);pointer-events:none;}
 
@@ -153,7 +153,6 @@
     .edu-degree{font-size:var(--text-sm);font-weight:700;color:var(--color-text);}
     .edu-school{font-size:var(--text-sm);color:var(--color-primary);font-weight:500;}
     .edu-year{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:2px;letter-spacing:0.04em;}
-
     /* Anime avatar wrap */
     .anime-wrap{position:relative;aspect-ratio:4/5;max-width:340px;width:100%;border-radius:var(--radius-2xl);overflow:visible;border:1px solid oklch(from var(--color-text) l c h/0.10);background:var(--color-surface-2);box-shadow:var(--shadow-md);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;}
     .anime-avatar{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:var(--radius-2xl);transform-origin:center bottom;}
@@ -162,17 +161,16 @@
     .btn-anime-talk{align-self:flex-start;display:inline-flex;align-items:center;gap:var(--space-2);padding:4px var(--space-4);border-radius:var(--radius-full);border:1px solid oklch(from var(--color-primary) l c h/0.5);background:var(--color-primary-highlight);color:var(--color-primary);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;}
     .btn-anime-talk:hover{border-color:var(--color-primary);box-shadow:0 0 18px var(--color-primary-glow);}
     .anime-dot{width:8px;height:8px;border-radius:999px;background:var(--color-primary);box-shadow:0 0 10px var(--color-primary-glow);}
-
     /* API warm-up status pill */
     #apiWarmup{display:none;position:fixed;bottom:var(--space-6);left:50%;transform:translateX(-50%);z-index:200;background:var(--color-surface-offset);border:1px solid oklch(from var(--color-primary) l c h/0.3);border-radius:var(--radius-full);padding:var(--space-2) var(--space-5);font-size:var(--text-xs);color:var(--color-primary);font-weight:600;letter-spacing:0.06em;gap:var(--space-2);align-items:center;animation:fadeup 0.4s ease;}
     #apiWarmup.show{display:flex;}
     @keyframes fadeup{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
     /* ═══════════════════════════════════════════
-       SKILLS — full-width wow bento section
+       SKILLS — FULL WIDTH WOW BENTO
     ═══════════════════════════════════════════ */
     #skills-section{
-      padding: clamp(var(--space-10),6vw,var(--space-20)) clamp(var(--space-8),8vw,var(--space-24));
+      padding: clamp(var(--space-10),6vw,var(--space-20)) clamp(var(--space-4),3vw,var(--space-8));
       background: var(--color-bg);
       position: relative;
       overflow: hidden;
@@ -182,50 +180,61 @@
       background:radial-gradient(ellipse 70% 50% at 50% 0%,color-mix(in oklch,var(--color-primary) 5%,transparent),transparent 65%);
       pointer-events:none;
     }
-    .skills-inner{max-width:var(--content-wide);margin:0 auto;position:relative;}
+    .skills-inner{max-width:100%;margin:0 auto;position:relative;padding:0 clamp(var(--space-4),2vw,var(--space-8));}
     .skills-header{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-6);margin-bottom:var(--space-8);flex-wrap:wrap;}
-    .skills-heading{font-family:var(--font-display);font-size:var(--text-2xl);font-weight:800;letter-spacing:-0.03em;color:var(--color-text);}
+    .skills-heading{
+      font-family:var(--font-display);font-size:var(--text-2xl);font-weight:800;letter-spacing:-0.03em;color:var(--color-text);
+      text-shadow:0 0 40px color-mix(in oklch,var(--color-primary) 20%,transparent);
+    }
     .skills-count{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:0.06em;text-transform:uppercase;padding-bottom:4px;}
-
     /* Category tab pills */
     .skills-tabs{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-6);}
     .skills-tab{padding:var(--space-1) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid oklch(from var(--color-text) l c h/0.12);color:var(--color-text-faint);background:transparent;cursor:pointer;transition:all var(--transition-interactive);}
     .skills-tab:hover{border-color:oklch(from var(--color-primary) l c h/0.4);color:var(--color-primary);}
     .skills-tab.active{background:var(--color-primary-highlight);border-color:oklch(from var(--color-primary) l c h/0.5);color:var(--color-primary);}
-
-    /* Bento grid — 5 equal columns */
+    /* Bento grid — 6 equal columns, full width */
     .skills-bento{
       display:grid;
-      grid-template-columns:repeat(5,1fr);
+      grid-template-columns:repeat(6,1fr);
       gap:var(--space-3);
     }
-    @media(max-width:1100px){.skills-bento{grid-template-columns:repeat(3,1fr);}}
-    @media(max-width:700px){.skills-bento{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:480px){.skills-bento{grid-template-columns:1fr;}}
-
+    @media(max-width:1280px){.skills-bento{grid-template-columns:repeat(4,1fr);}}
+    @media(max-width:900px){.skills-bento{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:640px){.skills-bento{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:400px){.skills-bento{grid-template-columns:1fr;}}
     .skill-card{
       background:var(--color-surface);
       border:1px solid oklch(from var(--color-text) l c h/0.08);
       border-radius:var(--radius-xl);
       padding:var(--space-5);
       display:flex;flex-direction:column;gap:var(--space-3);
-      transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive),transform var(--transition-interactive);
+      transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive),transform var(--transition-interactive),background var(--transition-interactive);
       cursor:default;
+      position:relative;overflow:hidden;
     }
+    .skill-card::before{
+      content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+      background:linear-gradient(90deg,transparent,var(--color-primary),transparent);
+      opacity:0;transition:opacity var(--transition-interactive);
+    }
+    .skill-card:hover::before{opacity:1;}
     .skill-card:hover{
-      border-color:oklch(from var(--color-primary) l c h/0.3);
-      box-shadow:0 0 28px var(--color-primary-glow),var(--shadow-md);
-      transform:translateY(-2px);
+      border-color:oklch(from var(--color-primary) l c h/0.35);
+      box-shadow:0 0 36px var(--color-primary-glow),var(--shadow-md);
+      transform:translateY(-3px);
+      background:color-mix(in oklch,var(--color-primary) 3%,var(--color-surface));
     }
-    /* featured card spans 2 cols */
-    .skill-card.featured{grid-column:span 2;}
-    @media(max-width:700px){.skill-card.featured{grid-column:span 1;}}
-
+    /* featured card spans 3 cols */
+    .skill-card.featured{grid-column:span 3;}
+    @media(max-width:900px){.skill-card.featured{grid-column:span 2;}}
+    @media(max-width:640px){.skill-card.featured{grid-column:span 2;}}
+    @media(max-width:400px){.skill-card.featured{grid-column:span 1;}}
     .skill-card-icon{
       width:36px;height:36px;border-radius:var(--radius-md);
       background:var(--color-primary-highlight);
       display:flex;align-items:center;justify-content:center;
       color:var(--color-primary);flex-shrink:0;
+      box-shadow:0 0 12px var(--color-primary-glow);
     }
     .skill-card-title{font-size:var(--text-xs);font-weight:700;color:var(--color-primary);letter-spacing:0.08em;text-transform:uppercase;}
     .skill-pills{display:flex;flex-wrap:wrap;gap:6px;}
@@ -243,15 +252,21 @@
       border-color:oklch(from var(--color-primary) l c h/0.5);
       color:var(--color-primary);
       background:var(--color-primary-highlight);
+      box-shadow:0 0 10px var(--color-primary-glow);
     }
     /* Proficiency bar inside featured card */
     .skill-bars{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-1);}
     .skill-bar-row{display:flex;align-items:center;gap:var(--space-3);}
     .skill-bar-label{font-size:var(--text-xs);color:var(--color-text-muted);width:90px;flex-shrink:0;white-space:nowrap;}
     .skill-bar-track{flex:1;height:4px;background:var(--color-surface-offset);border-radius:var(--radius-full);overflow:hidden;}
-    .skill-bar-fill{height:100%;background:var(--color-primary);border-radius:var(--radius-full);transform-origin:left;transform:scaleX(0);transition:transform 0.9s cubic-bezier(0.16,1,0.3,1);}
+    .skill-bar-fill{
+      height:100%;
+      background:linear-gradient(90deg,var(--color-primary),color-mix(in oklch,var(--color-primary) 60%,#fff));
+      border-radius:var(--radius-full);transform-origin:left;transform:scaleX(0);
+      transition:transform 0.9s cubic-bezier(0.16,1,0.3,1);
+      box-shadow:0 0 8px var(--color-primary-glow);
+    }
     .skill-bar-fill.animated{transform:scaleX(1);}
-
     /* Marquee row at bottom */
     .skills-marquee-wrap{margin-top:var(--space-8);overflow:hidden;position:relative;}
     .skills-marquee-wrap::before,.skills-marquee-wrap::after{
@@ -270,7 +285,9 @@
       color:var(--color-text-faint);
       background:var(--color-surface);
       white-space:nowrap;flex-shrink:0;
+      transition:all var(--transition-interactive);
     }
+    .m-pill:hover{color:var(--color-primary);border-color:oklch(from var(--color-primary) l c h/0.4);box-shadow:0 0 10px var(--color-primary-glow);}
 
     /* EXPERIENCE */
     #experience{padding:clamp(var(--space-10),6vw,var(--space-20)) clamp(var(--space-8),8vw,var(--space-24));background:var(--color-bg);}
@@ -338,15 +355,18 @@
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
-  <div id="apiWarmup" role="status" aria-live="polite"></div>
+  <div id="apiWarmup" role="status" aria-live="polite">
+    <span class="badge-dot"></span>
+    <span id="apiWarmupMsg">Waking up AI avatar…</span>
+  </div>
 
   <!-- NAV -->
   <nav id="mainNav" aria-label="Main navigation">
     <a href="#hero" class="nav-logo" aria-label="Seeshuraj Bhoopalan — home">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-        <rect width="28" height="28" rx="7" fill="currentColor" opacity="0.08"/>
-        <path d="M7 14 L14 7 L21 14 L14 21 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-        <circle cx="14" cy="14" r="3" fill="currentColor"/>
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <rect width="22" height="22" rx="5" fill="currentColor" opacity="0.08"/>
+        <path d="M11 3 L19 11 L11 19 L3 11 Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <circle cx="11" cy="11" r="2.5" fill="currentColor"/>
       </svg>
       <span class="nav-logo-text">SB</span>
     </a>
@@ -358,276 +378,352 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-actions">
-      <button class="btn-theme" data-theme-toggle aria-label="Toggle theme" type="button">
+      <button class="btn-theme" data-theme-toggle aria-label="Switch theme">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
       <a href="https://github.com/seeshuraj" class="btn-primary" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </nav>
 
+  <!-- HERO -->
   <main id="main">
+  <section id="hero" aria-label="Hero introduction">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-particles" id="particles" aria-hidden="true"></div>
 
-    <!-- HERO -->
-    <section id="hero" aria-label="Hero">
-      <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="hero-particles" id="particles" aria-hidden="true"></div>
-      <div class="hero-content">
-        <div class="hero-left">
-          <div class="hero-badge">
-            <span class="badge-dot" aria-hidden="true"></span>
-            Available &middot; Dublin &middot; EU &middot; Remote
-          </div>
-          <h1 class="hero-heading" aria-label="Seeshuraj Bhoopalan AI and Software Engineer">
-            <span class="line"><span class="word">Seeshuraj</span></span>
-            <span class="line"><span class="word">Bhoopalan</span></span>
-            <span class="line"><span class="word accent">AI &amp;</span></span>
-            <span class="line"><span class="word">Software</span></span>
-            <span class="line"><span class="word">Engineer</span></span>
-          </h1>
-          <p class="hero-subtitle" id="heroSubtitle">
-            PG Diploma in High Performance Computing &middot; Trinity College Dublin.
-            Building LLM-powered tools, cloud systems and full-stack products
-            &mdash; with a focus on performance, scale and correctness.
-          </p>
-          <div class="hero-ctas" id="heroCtas">
-            <a href="#projects" class="btn-primary">View projects</a>
-            <a href="mailto:bhoopals@tcd.ie" class="btn-ghost">bhoopals@tcd.ie</a>
-            <a href="https://www.linkedin.com/in/seeshurajbhoopalan/" class="btn-ghost" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-              LinkedIn
-            </a>
-          </div>
-          <div class="hero-stats" id="heroStats">
-            <div class="stat"><span class="stat-number" data-count="2">0</span><span class="stat-label">Years exp.</span></div>
-            <div class="stat"><span class="stat-number" data-count="12">0</span><span class="stat-label">Projects shipped</span></div>
-            <div class="stat"><span class="stat-number" data-count="20">0</span><span class="stat-label">Technologies</span></div>
-            <div class="stat"><span class="stat-number" data-count="3">0</span><span class="stat-label">Hackathon wins</span></div>
-          </div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-badge" aria-label="Status: Available">
+          <span class="badge-dot" aria-hidden="true"></span>
+          Available · Dublin · EU · Remote
         </div>
-        <div class="hero-right">
-          <div class="hero-photo-frame">
-            <img src="./assets/background-profile.jpg" alt="Seeshuraj Bhoopalan" width="420" height="525" loading="eager">
-          </div>
+        <h1 class="hero-heading" aria-label="Seeshuraj Bhoopalan — AI and Software Engineer">
+          <span class="line"><span class="word">Seeshuraj</span></span>
+          <span class="line"><span class="word">Bhoopalan</span></span>
+          <span class="line"><span class="word accent">AI &amp;</span></span>
+          <span class="line"><span class="word">Software</span></span>
+          <span class="line"><span class="word">Engineer</span></span>
+        </h1>
+        <p class="hero-subtitle" id="heroSubtitle">
+          PG Diploma in High Performance Computing · Trinity College Dublin.
+          Building LLM-powered tools, cloud systems and full-stack products —
+          with a focus on performance, scale and correctness.
+        </p>
+        <div class="hero-ctas" id="heroCtas">
+          <a href="#projects" class="btn-primary">View projects</a>
+          <a href="mailto:bhoopals@tcd.ie" class="btn-ghost">bhoopals@tcd.ie</a>
+          <a href="https://www.linkedin.com/in/seeshurajbhoopalan/" class="btn-ghost" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+        <div class="hero-stats" id="heroStats">
+          <div class="stat"><span class="stat-number" data-count="2">0</span><span class="stat-label">Years exp.</span></div>
+          <div class="stat"><span class="stat-number" data-count="6">0</span><span class="stat-label">Projects shipped</span></div>
+          <div class="stat"><span class="stat-number" data-count="30">0</span><span class="stat-label">Technologies</span></div>
+          <div class="stat"><span class="stat-number" data-count="2">0</span><span class="stat-label">Hackathon wins</span></div>
         </div>
       </div>
-      <div class="scroll-hint" aria-hidden="true">
-        <span class="scroll-line"></span>
+      <div class="hero-right">
+        <div class="hero-photo-frame">
+          <img src="./assets/hero-photo.jpg" alt="Seeshuraj Bhoopalan" width="420" height="525" loading="eager">
+        </div>
       </div>
-    </section>
+    </div>
 
-    <!-- ABOUT -->
-    <section id="about" aria-label="About Seeshuraj">
-      <div class="about-inner">
-        <div class="about-grid">
-          <div>
-            <p class="section-label">About me</p>
-            <h2 class="about-heading">I build intelligent systems that ship to production.</h2>
-            <p class="about-body">Early-career AI &amp; Software Engineer with hands-on experience in LLM-powered applications, cloud infrastructure, and full-stack development. Proficient in few-shot prompting, chain-of-thought reasoning, RAG pipelines, and multi-agent LLM workflows. Built and deployed ETL pipelines, observability stacks, and AI-powered tools across AWS and Azure.</p>
-            <p class="about-body">Currently completing my PG Diploma in High Performance Computing at Trinity College Dublin, with a focus on ML systems performance and cloud resilience. Previously published at ACM 2023 on multi-modal biometric authentication.</p>
-            <div class="edu-block">
-              <div class="edu-item">
-                <div class="edu-degree">PG Diploma &mdash; High Performance Computing</div>
-                <div class="edu-school">Trinity College Dublin</div>
-                <div class="edu-year">2024 &ndash; 2026 &middot; 2:1</div>
-              </div>
-              <div class="edu-item">
-                <div class="edu-degree">B.Tech. &mdash; Information Technology</div>
-                <div class="edu-school">St. Joseph's College of Engineering, Anna University</div>
-                <div class="edu-year">2020 &ndash; 2024 &middot; 8.63</div>
-              </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" aria-label="About Seeshuraj">
+    <div class="about-inner">
+      <div class="about-grid">
+        <div>
+          <p class="section-label">About me</p>
+          <h2 class="about-heading">I build intelligent systems that ship to production.</h2>
+          <p class="about-body">Early-career AI &amp; Software Engineer with hands-on experience in LLM-powered applications, cloud infrastructure, and full-stack development. Proficient in few-shot prompting, chain-of-thought reasoning, RAG pipelines, and multi-agent LLM workflows. Built and deployed ETL pipelines, observability stacks, and AI-powered tools across AWS and Azure.</p>
+          <p class="about-body">Currently completing my PG Diploma in High Performance Computing at Trinity College Dublin, with a focus on ML systems performance and cloud resilience. Previously published at ACM 2023 on multi-modal biometric authentication.</p>
+          <div class="edu-block">
+            <div class="edu-item">
+              <div class="edu-degree">PG Diploma — High Performance Computing</div>
+              <div class="edu-school">Trinity College Dublin</div>
+              <div class="edu-year">2024 – 2026 · 2:1</div>
+            </div>
+            <div class="edu-item">
+              <div class="edu-degree">B.Tech. — Information Technology</div>
+              <div class="edu-school">St. Joseph's College of Engineering, Anna University</div>
+              <div class="edu-year">2020 – 2024 · 8.63</div>
             </div>
           </div>
-
-          <!-- Right: anime avatar with AI chat -->
-          <div style="display:flex;justify-content:center;">
-            <div class="anime-wrap avatar-state-idle" id="animeWrap">
-              <img src="./assets/anime-seeshuraj.png" alt="Anime avatar of Seeshuraj Bhoopalan" class="anime-avatar" width="340" height="425" loading="lazy">
-              <div id="avatarBubble" class="avatar-bubble" aria-live="polite" role="status"></div>
-              <div class="anime-overlay">
-                <p class="anime-caption">Ask my AI avatar about my experience.</p>
-                <span id="avatarMicNote" class="avatar-mic-note"></span>
-                <button id="animeTalkBtn" class="btn-anime-talk" aria-label="Talk to Seeshuraj AI avatar" type="button">
-                  <span class="anime-dot" aria-hidden="true"></span>
-                  Talk to Seeshuraj
-                </button>
+        </div>
+        <div style="display:flex;justify-content:center;">
+          <div class="anime-wrap" id="animeWrap">
+            <img src="./assets/anime-seeshuraj.png" alt="Anime avatar of Seeshuraj Bhoopalan" class="anime-avatar" width="340" height="425" loading="lazy">
+            <div class="anime-overlay">
+              <span class="anime-caption">Ask my AI avatar about my experience.</span>
+              <div style="display:flex;align-items:center;gap:var(--space-2);">
+                <span class="anime-dot" aria-hidden="true"></span>
+                <button id="animeTalkBtn" class="btn-anime-talk" type="button" aria-label="Talk to Seeshuraj AI avatar">Talk to Seeshuraj</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SKILLS — full-width bento section -->
-    <section id="skills-section" aria-label="Technical skills">
-      <div class="skills-inner">
-        <div class="skills-header">
-          <div>
-            <p class="section-label">Arsenal</p>
-            <h2 class="skills-heading">Technical Skills</h2>
+  <!-- SKILLS -->
+  <section id="skills-section" aria-label="Technical skills">
+    <div class="skills-inner">
+      <div class="skills-header">
+        <div>
+          <p class="section-label">Arsenal</p>
+          <h2 class="skills-heading">Technical Skills</h2>
+        </div>
+        <span class="skills-count">30+ technologies</span>
+      </div>
+
+      <!-- Category filter tabs -->
+      <div class="skills-tabs" role="group" aria-label="Filter skills by category">
+        <button class="skills-tab active" data-filter="all" type="button">All</button>
+        <button class="skills-tab" data-filter="ml" type="button">ML &amp; AI</button>
+        <button class="skills-tab" data-filter="lang" type="button">Languages</button>
+        <button class="skills-tab" data-filter="cloud" type="button">Cloud &amp; DevOps</button>
+        <button class="skills-tab" data-filter="web" type="button">Web &amp; Data</button>
+        <button class="skills-tab" data-filter="hpc" type="button">HPC &amp; Systems</button>
+      </div>
+
+      <!-- Bento grid -->
+      <div class="skills-bento" id="skillsBento">
+
+        <!-- ML & LLMs — featured (spans 3 cols) -->
+        <div class="skill-card featured" data-cat="ml">
+          <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <div class="skill-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="skill-card-title">ML &amp; LLMs</span>
           </div>
-          <span class="skills-count">30+ technologies</span>
+          <div class="skill-bars" id="skillBars">
+            <div class="skill-bar-row"><span class="skill-bar-label">PyTorch</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.88" data-w="0.88"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">LangChain</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.85" data-w="0.85"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">RAG pipelines</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.90" data-w="0.90"></div></div></div>
+            <div class="skill-bar-row"><span class="skill-bar-label">OpenAI API</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.92" data-w="0.92"></div></div></div>
+          </div>
+          <div class="skill-pills">
+            <span class="s-pill">LangGraph</span>
+            <span class="s-pill">Ollama</span>
+            <span class="s-pill">Hugging Face</span>
+            <span class="s-pill">Bedrock</span>
+            <span class="s-pill">NVIDIA NIM</span>
+          </div>
         </div>
 
-        <!-- Category filter tabs -->
-        <div class="skills-tabs" role="group" aria-label="Filter skills by category">
-          <button class="skills-tab active" data-filter="all" type="button">All</button>
-          <button class="skills-tab" data-filter="ml" type="button">ML &amp; AI</button>
-          <button class="skills-tab" data-filter="lang" type="button">Languages</button>
-          <button class="skills-tab" data-filter="cloud" type="button">Cloud &amp; DevOps</button>
-          <button class="skills-tab" data-filter="web" type="button">Web &amp; Data</button>
-          <button class="skills-tab" data-filter="hpc" type="button">HPC &amp; Systems</button>
+        <!-- Languages -->
+        <div class="skill-card" data-cat="lang">
+          <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <div class="skill-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <span class="skill-card-title">Languages</span>
+          </div>
+          <div class="skill-pills">
+            <span class="s-pill">Python</span>
+            <span class="s-pill">TypeScript</span>
+            <span class="s-pill">C++</span>
+            <span class="s-pill">JavaScript</span>
+            <span class="s-pill">Java</span>
+            <span class="s-pill">SQL</span>
+            <span class="s-pill">Bash</span>
+            <span class="s-pill">CUDA C</span>
+          </div>
         </div>
 
-        <!-- Bento grid -->
-        <div class="skills-bento" id="skillsBento">
-
-          <!-- ML & LLMs — featured (spans 2 cols) -->
-          <div class="skill-card featured" data-cat="ml">
-            <div style="display:flex;align-items:center;gap:var(--space-3);">
-              <div class="skill-card-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-              </div>
-              <span class="skill-card-title">ML &amp; LLMs</span>
+        <!-- Cloud & DevOps -->
+        <div class="skill-card" data-cat="cloud">
+          <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <div class="skill-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
-            <div class="skill-bars" id="skillBars">
-              <div class="skill-bar-row"><span class="skill-bar-label">PyTorch</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.88" data-w="0.88"></div></div></div>
-              <div class="skill-bar-row"><span class="skill-bar-label">LangChain</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.85" data-w="0.85"></div></div></div>
-              <div class="skill-bar-row"><span class="skill-bar-label">RAG pipelines</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.90" data-w="0.90"></div></div></div>
-              <div class="skill-bar-row"><span class="skill-bar-label">OpenAI API</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.92" data-w="0.92"></div></div></div>
-            </div>
-            <div class="skill-pills">
-              <span class="s-pill">LangGraph</span><span class="s-pill">Ollama</span><span class="s-pill">Hugging Face</span><span class="s-pill">Bedrock</span><span class="s-pill">NVIDIA NIM</span>
-            </div>
+            <span class="skill-card-title">Cloud &amp; DevOps</span>
           </div>
-
-          <!-- Languages -->
-          <div class="skill-card" data-cat="lang">
-            <div style="display:flex;align-items:center;gap:var(--space-3);">
-              <div class="skill-card-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              </div>
-              <span class="skill-card-title">Languages</span>
-            </div>
-            <div class="skill-pills">
-              <span class="s-pill">Python</span><span class="s-pill">TypeScript</span><span class="s-pill">C++</span><span class="s-pill">JavaScript</span><span class="s-pill">Java</span><span class="s-pill">SQL</span><span class="s-pill">Bash</span><span class="s-pill">CUDA C</span>
-            </div>
+          <div class="skill-pills">
+            <span class="s-pill">AWS</span>
+            <span class="s-pill">Azure</span>
+            <span class="s-pill">Docker</span>
+            <span class="s-pill">Kubernetes</span>
+            <span class="s-pill">Jenkins</span>
+            <span class="s-pill">Terraform</span>
+            <span class="s-pill">CI/CD</span>
+            <span class="s-pill">GitHub Actions</span>
           </div>
-
-          <!-- Cloud & DevOps -->
-          <div class="skill-card" data-cat="cloud">
-            <div style="display:flex;align-items:center;gap:var(--space-3);">
-              <div class="skill-card-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
-              </div>
-              <span class="skill-card-title">Cloud &amp; DevOps</span>
-            </div>
-            <div class="skill-pills">
-              <span class="s-pill">AWS</span><span class="s-pill">Azure</span><span class="s-pill">Docker</span><span class="s-pill">Kubernetes</span><span class="s-pill">Jenkins</span><span class="s-pill">Terraform</span><span class="s-pill">CI/CD</span><span class="s-pill">GitHub Actions</span>
-            </div>
-          </div>
-
-          <!-- Web & Data -->
-          <div class="skill-card" data-cat="web">
-            <div style="display:flex;align-items:center;gap:var(--space-3);">
-              <div class="skill-card-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              </div>
-              <span class="skill-card-title">Web &amp; Data</span>
-            </div>
-            <div class="skill-pills">
-              <span class="s-pill">FastAPI</span><span class="s-pill">React</span><span class="s-pill">Next.js</span><span class="s-pill">Node.js</span><span class="s-pill">PostgreSQL</span><span class="s-pill">MongoDB</span><span class="s-pill">Supabase</span><span class="s-pill">Redis</span>
-            </div>
-          </div>
-
-          <!-- HPC & Systems -->
-          <div class="skill-card" data-cat="hpc">
-            <div style="display:flex;align-items:center;gap:var(--space-3);">
-              <div class="skill-card-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-              </div>
-              <span class="skill-card-title">HPC &amp; Systems</span>
-            </div>
-            <div class="skill-pills">
-              <span class="s-pill">CUDA</span><span class="s-pill">OpenMP</span><span class="s-pill">MPI</span><span class="s-pill">Prometheus</span><span class="s-pill">Grafana</span><span class="s-pill">Linux</span><span class="s-pill">OpenCL</span>
-            </div>
-          </div>
-
         </div>
 
-        <!-- Marquee row -->
-        <div class="skills-marquee-wrap" aria-hidden="true">
-          <div class="skills-marquee" id="skillsMarquee"></div>
+        <!-- Web & Data -->
+        <div class="skill-card" data-cat="web">
+          <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <div class="skill-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <span class="skill-card-title">Web &amp; Data</span>
+          </div>
+          <div class="skill-pills">
+            <span class="s-pill">FastAPI</span>
+            <span class="s-pill">React</span>
+            <span class="s-pill">Next.js</span>
+            <span class="s-pill">Node.js</span>
+            <span class="s-pill">PostgreSQL</span>
+            <span class="s-pill">MongoDB</span>
+            <span class="s-pill">Supabase</span>
+            <span class="s-pill">Redis</span>
+          </div>
+        </div>
+
+        <!-- HPC & Systems -->
+        <div class="skill-card" data-cat="hpc">
+          <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <div class="skill-card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+            </div>
+            <span class="skill-card-title">HPC &amp; Systems</span>
+          </div>
+          <div class="skill-pills">
+            <span class="s-pill">CUDA</span>
+            <span class="s-pill">OpenMP</span>
+            <span class="s-pill">MPI</span>
+            <span class="s-pill">Prometheus</span>
+            <span class="s-pill">Grafana</span>
+            <span class="s-pill">Linux</span>
+            <span class="s-pill">OpenCL</span>
+          </div>
+        </div>
+
+      </div><!-- /skills-bento -->
+
+      <!-- Marquee -->
+      <div class="skills-marquee-wrap" aria-hidden="true">
+        <div class="skills-marquee" id="skillsMarquee"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" aria-label="Work experience">
+    <div class="exp-inner">
+      <p class="section-label">Work history</p>
+      <h2 class="section-heading">Experience</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="exp-meta">
+            <div>
+              <div class="exp-role">Freelance Full Stack Developer</div>
+              <div class="exp-company">JJS Impex</div>
+            </div>
+            <div class="exp-date">Aug 2025 – Nov 2025</div>
+          </div>
+          <ul class="exp-points">
+            <li>Developed and deployed React front-end with Node.js backend; built product catalog and inquiry workflows with real-time validation, improving lead conversion by 40%.</li>
+            <li>Implemented SEO strategies improving organic visibility by 35%; integrated Zoho Workforce for automated scheduling and attendance tracking.</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="exp-meta">
+            <div>
+              <div class="exp-role">Cloud Engineer</div>
+              <div class="exp-company">Beyond Youth's Solution</div>
+            </div>
+            <div class="exp-date">Apr 2024 – Jun 2025</div>
+          </div>
+          <ul class="exp-points">
+            <li>Designed scalable AWS infrastructures with SLOs/SLIs, maintaining 99.9% uptime with error budget tracking.</li>
+            <li>Automated ETL pipelines for multi-source integration; deployed CI/CD pipelines using Docker and Jenkins, reducing release cycle by 40%.</li>
+            <li>Implemented observability stack (CloudWatch, distributed tracing); authored postmortems and RCAs for production incidents.</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="exp-meta">
+            <div>
+              <div class="exp-role">Backend Developer Intern</div>
+              <div class="exp-company">Lyft</div>
+            </div>
+            <div class="exp-date">Jan 2023 – Jun 2023</div>
+          </div>
+          <ul class="exp-points">
+            <li>Engineered high-throughput Flask APIs managing 1M+ transactions/day; built microservices increasing reliability by 30%.</li>
+            <li>Optimised MongoDB and PostgreSQL queries, reducing latency by 25%; debugged production issues across API, database, and infra layers.</li>
+          </ul>
+        </div>
+        <div class="timeline-item">
+          <div class="exp-meta">
+            <div>
+              <div class="exp-role">Web Developer Intern</div>
+              <div class="exp-company">Tranz Mannequins Pvt. Ltd</div>
+            </div>
+            <div class="exp-date">Apr 2022 – Oct 2022</div>
+          </div>
+          <ul class="exp-points">
+            <li>Developed a Django-based e-commerce platform boosting sales by 50%; integrated payment gateways and improved real-time transaction flow.</li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- EXPERIENCE -->
-    <section id="experience" aria-label="Work experience">
-      <div class="exp-inner">
-        <p class="section-label">Work history</p>
-        <h2 class="section-heading">Experience</h2>
-        <div class="timeline" role="list">
-          <div class="timeline-item" role="listitem"><div class="exp-meta"><div><div class="exp-role">Freelance Full Stack Developer</div><div class="exp-company">JJS Impex</div></div><div class="exp-date">Aug 2025 &ndash; Nov 2025</div></div><ul class="exp-points"><li>Developed and deployed React front-end with Node.js backend; built product catalog and inquiry workflows with real-time validation, improving lead conversion by 40%.</li><li>Implemented SEO strategies improving organic visibility by 35%; integrated Zoho Workforce for automated scheduling and attendance tracking.</li></ul></div>
-          <div class="timeline-item" role="listitem"><div class="exp-meta"><div><div class="exp-role">Cloud Engineer</div><div class="exp-company">Beyond Youth's Solution</div></div><div class="exp-date">Apr 2024 &ndash; Jun 2025</div></div><ul class="exp-points"><li>Designed scalable AWS infrastructures with SLOs/SLIs, maintaining 99.9% uptime with error budget tracking.</li><li>Automated ETL pipelines for multi-source integration; deployed CI/CD pipelines using Docker and Jenkins, reducing release cycle by 40%.</li><li>Implemented observability stack (CloudWatch, distributed tracing); authored postmortems and RCAs for production incidents.</li></ul></div>
-          <div class="timeline-item" role="listitem"><div class="exp-meta"><div><div class="exp-role">Backend Developer Intern</div><div class="exp-company">Lyft</div></div><div class="exp-date">Jan 2023 &ndash; Jun 2023</div></div><ul class="exp-points"><li>Engineered high-throughput Flask APIs managing 1M+ transactions/day; built microservices increasing reliability by 30%.</li><li>Optimised MongoDB and PostgreSQL queries, reducing latency by 25%; debugged production issues across API, database, and infra layers.</li></ul></div>
-          <div class="timeline-item" role="listitem"><div class="exp-meta"><div><div class="exp-role">Web Developer Intern</div><div class="exp-company">Tranz Mannequins Pvt. Ltd</div></div><div class="exp-date">Apr 2022 &ndash; Oct 2022</div></div><ul class="exp-points"><li>Developed a Django-based e-commerce platform boosting sales by 50%; integrated payment gateways and improved real-time transaction flow.</li></ul></div>
-        </div>
+  <!-- PROJECTS -->
+  <section id="projects" aria-label="Featured projects">
+    <div class="projects-header">
+      <div>
+        <p class="section-label">Featured work</p>
+        <h2 class="projects-heading">Key projects</h2>
       </div>
-    </section>
+      <a href="https://github.com/seeshuraj" class="projects-link" target="_blank" rel="noopener noreferrer">All on GitHub →</a>
+    </div>
+    <div class="projects-grid" id="projectsGrid" role="list"></div>
+  </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" aria-label="Featured projects">
-      <div class="projects-header">
-        <div><p class="section-label">Featured work</p><h2 class="projects-heading">Key projects</h2></div>
-        <a href="https://github.com/seeshuraj" class="projects-link" target="_blank" rel="noopener noreferrer">All on GitHub &rarr;</a>
+  <!-- CERTIFICATIONS -->
+  <section id="certifications" aria-label="Certifications">
+    <div class="certs-inner">
+      <p class="section-label">Credentials</p>
+      <h2 class="section-heading">Certifications</h2>
+      <div class="certs-grid" id="certsGrid"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" aria-label="Contact">
+    <div class="contact-inner">
+      <p class="section-label">Get in touch</p>
+      <h2 class="contact-heading">Let's build something together</h2>
+      <p class="contact-sub">Open to graduate AI / software engineering roles in Dublin, EU, and remote. Available immediately. I respond to every email.</p>
+      <div class="contact-links">
+        <a href="mailto:bhoopals@tcd.ie" class="btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          bhoopals@tcd.ie
+        </a>
+        <a href="https://www.linkedin.com/in/seeshurajbhoopalan/" class="btn-outline" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/seeshuraj" class="btn-outline" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
       </div>
-      <div class="projects-grid" id="projectsGrid" role="list"></div>
-    </section>
-
-    <!-- CERTIFICATIONS -->
-    <section id="certifications" aria-label="Certifications">
-      <div class="certs-inner">
-        <p class="section-label">Credentials</p>
-        <h2 class="section-heading">Certifications</h2>
-        <div class="certs-grid" id="certsGrid"></div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" aria-label="Contact">
-      <div class="contact-inner">
-        <p class="section-label">Get in touch</p>
-        <h2 class="contact-heading">Let&rsquo;s build something together</h2>
-        <p class="contact-sub">Open to graduate AI / software engineering roles in Dublin, EU, and remote. Available immediately. I respond to every email.</p>
-        <div class="contact-links">
-          <a href="mailto:bhoopals@tcd.ie" class="btn-outline">bhoopals@tcd.ie</a>
-          <a href="https://www.linkedin.com/in/seeshurajbhoopalan/" class="btn-outline" target="_blank" rel="noopener noreferrer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            LinkedIn
-          </a>
-          <a href="https://github.com/seeshuraj" class="btn-outline" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
-        <p class="contact-note">Based in Dublin 18, Ireland &middot; Stamp 2 visa &middot; Open to sponsorship</p>
-      </div>
-    </section>
-
+      <p class="contact-note">Based in Dublin 18, Ireland · Stamp 2 visa · Open to sponsorship</p>
+    </div>
+  </section>
   </main>
 
+  <!-- FOOTER -->
   <footer>
-    <p class="footer-copy">&copy; 2026 &nbsp;<span>Seeshuraj Bhoopalan</span>&nbsp;&mdash; PG Diploma HPC, Trinity College Dublin</p>
-    <p class="footer-copy">Built with GSAP &amp; Lenis &middot; Deployed on <span>GitHub Pages</span></p>
+    <p class="footer-copy">© 2026 &nbsp;<span>Seeshuraj Bhoopalan</span> &mdash; PG Diploma HPC, Trinity College Dublin</p>
+    <p class="footer-copy">Built with GSAP &amp; Lenis · Deployed on <span>GitHub Pages</span></p>
   </footer>
 
-  <!-- Avatar API URL -->
   <script>
     window.__AVATAR_API_URL = 'https://seeshuraj-avatar-api.onrender.com';
-  </script>
-
-  <!-- Avatar widget -->
-  <script src="./avatar.js" defer></script>
-
-  <script>
     // ── Theme toggle ─────────────────────────────────
     (function(){
       const t = document.querySelector('[data-theme-toggle]');
@@ -643,57 +739,38 @@
           : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
       });
     })();
-
-    // ── Nav scroll effect ────────────────────────────
+    // ── Nav scroll effect ─────────────────────────────
     const nav = document.getElementById('mainNav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 40);
     }, { passive: true });
-
-    // ── GSAP animations ──────────────────────────────
+    // ── GSAP animations ───────────────────────────────
     gsap.registerPlugin(ScrollTrigger);
-
-    // Hero entrance
     const heroWords = document.querySelectorAll('.hero-heading .word');
     gsap.set(heroWords, { y: '110%', opacity: 0 });
-    gsap.to(heroWords, {
-      y: '0%', opacity: 1, duration: 0.9, stagger: 0.08,
-      ease: 'expo.out', delay: 0.2
-    });
+    gsap.to(heroWords, { y: '0%', opacity: 1, duration: 0.9, stagger: 0.08, ease: 'expo.out', delay: 0.2 });
     gsap.from('#heroSubtitle', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out', delay: 0.85 });
     gsap.from('#heroCtas', { opacity: 0, y: 16, duration: 0.7, ease: 'expo.out', delay: 1.0 });
     gsap.from('#heroStats', { opacity: 0, y: 16, duration: 0.7, ease: 'expo.out', delay: 1.15 });
     gsap.from('.hero-photo-frame', { opacity: 0, scale: 0.95, duration: 1.0, ease: 'expo.out', delay: 0.4 });
-
     // Stat counters
     document.querySelectorAll('.stat-number').forEach(el => {
       const target = +el.dataset.count;
-      ScrollTrigger.create({
-        trigger: el, once: true,
-        onEnter: () => gsap.to(el, {
-          textContent: target, duration: 1.4, ease: 'power2.out',
-          snap: { textContent: 1 },
-          onUpdate() { el.textContent = Math.round(+el.textContent); }
-        })
+      ScrollTrigger.create({ trigger: el, once: true, onEnter: () =>
+        gsap.to(el, { textContent: target, duration: 1.4, ease: 'power2.out', snap: { textContent: 1 },
+          onUpdate() { el.textContent = Math.round(+el.textContent); } })
       });
     });
-
     // Scroll reveals
     document.querySelectorAll('.timeline-item, .project-card, .cert-card, .edu-item').forEach(el => {
-      gsap.from(el, {
-        opacity: 0, y: 28, duration: 0.7, ease: 'expo.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true }
-      });
+      gsap.from(el, { opacity: 0, y: 28, duration: 0.7, ease: 'expo.out',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
     });
-
-    // Skills bento stagger entrance
+    // Skills bento stagger
     ScrollTrigger.create({
       trigger: '#skillsBento', start: 'top 82%', once: true,
       onEnter: () => {
-        gsap.from('.skill-card', {
-          opacity: 0, y: 32, scale: 0.97, duration: 0.65, stagger: 0.08, ease: 'expo.out'
-        });
-        // Animate skill bars
+        gsap.from('.skill-card', { opacity: 0, y: 32, scale: 0.97, duration: 0.65, stagger: 0.08, ease: 'expo.out' });
         document.querySelectorAll('.skill-bar-fill').forEach(bar => {
           const w = parseFloat(bar.dataset.w);
           bar.style.transform = 'scaleX(0)';
@@ -704,15 +781,9 @@
         });
       }
     });
-
     // Parallax hero bg
-    gsap.to('#heroBg', {
-      yPercent: 18,
-      ease: 'none',
-      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
-    });
-
-    // ── Skills tab filter ────────────────────────────
+    gsap.to('#heroBg', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+    // ── Skills tab filter ─────────────────────────────
     document.querySelectorAll('.skills-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.skills-tab').forEach(t => t.classList.remove('active'));
@@ -720,16 +791,11 @@
         const filter = tab.dataset.filter;
         document.querySelectorAll('.skill-card').forEach(card => {
           const match = filter === 'all' || card.dataset.cat === filter;
-          gsap.to(card, {
-            opacity: match ? 1 : 0.22,
-            scale: match ? 1 : 0.97,
-            duration: 0.3, ease: 'power2.out'
-          });
+          gsap.to(card, { opacity: match ? 1 : 0.22, scale: match ? 1 : 0.97, duration: 0.3, ease: 'power2.out' });
         });
       });
     });
-
-    // ── Marquee pills ────────────────────────────────
+    // ── Marquee pills ─────────────────────────────────
     const allSkills = [
       'Python','TypeScript','CUDA','PyTorch','LangChain','FastAPI','React','Next.js',
       'AWS','Azure','Docker','Kubernetes','PostgreSQL','MongoDB','Hugging Face','OpenAI API',
@@ -737,84 +803,35 @@
       'Supabase','Redis','Node.js','Java','C++','SQL','Bash','Linux','LangGraph','Bedrock'
     ];
     const marquee = document.getElementById('skillsMarquee');
-    // duplicate for seamless loop
     [...allSkills, ...allSkills].forEach(skill => {
       const pill = document.createElement('span');
       pill.className = 'm-pill';
       pill.textContent = skill;
       marquee.appendChild(pill);
     });
-
-    // ── Particles ────────────────────────────────────
+    // ── Particles ─────────────────────────────────────
     const container = document.getElementById('particles');
     for (let i = 0; i < 22; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
       p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;`;
       container.appendChild(p);
-      gsap.to(p, {
-        opacity: Math.random() * 0.5 + 0.1,
-        y: -(Math.random() * 120 + 40),
-        x: (Math.random() - 0.5) * 60,
-        duration: Math.random() * 6 + 5,
-        repeat: -1, yoyo: true,
-        ease: 'sine.inOut',
-        delay: Math.random() * 4
-      });
+      gsap.to(p, { opacity: Math.random() * 0.5 + 0.1, y: -(Math.random() * 120 + 40), x: (Math.random() - 0.5) * 60, duration: Math.random() * 6 + 5, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: Math.random() * 4 });
     }
-
-    // ── Lenis smooth scroll ──────────────────────────
+    // ── Lenis smooth scroll ───────────────────────────
     const lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(time => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
-
-    // ── Projects data ────────────────────────────────
+    // ── Projects data ─────────────────────────────────
     const projects = [
-      {
-        title: 'LLM Test Lab',
-        desc: 'Full-stack LLM evaluation platform. FastAPI backend, Next.js frontend, multi-model benchmarking with latency, accuracy and cost metrics. Supports OpenAI, Anthropic, local Ollama models.',
-        tags: ['FastAPI', 'Next.js', 'Python', 'Supabase', 'Docker'],
-        github: 'https://github.com/seeshuraj/llm-test-lab',
-        demo: null
-      },
-      {
-        title: 'AI Anime Avatar API',
-        desc: 'RAG-powered conversational avatar. NVIDIA NIM (DeepSeek-V3.1) for chat, Azure Neural TTS for voice, FastAPI backend deployed on Render. Answers questions about my CV in character.',
-        tags: ['FastAPI', 'NVIDIA NIM', 'Azure TTS', 'RAG', 'Render'],
-        github: 'https://github.com/seeshuraj/seeshuraj-avatar-api',
-        demo: 'https://seeshuraj-avatar-api.onrender.com/docs'
-      },
-      {
-        title: 'HPC Benchmarking Suite',
-        desc: 'CUDA + OpenMP + MPI performance benchmarking suite for Trinity HPC cluster. Automated result collection, Prometheus/Grafana dashboards, comparative analysis across parallelism models.',
-        tags: ['CUDA', 'OpenMP', 'MPI', 'Python', 'Grafana'],
-        github: 'https://github.com/seeshuraj',
-        demo: null
-      },
-      {
-        title: 'Cloud ETL Pipeline',
-        desc: 'Serverless ETL pipeline on AWS (Lambda, S3, Glue, RDS). Multi-source ingestion with schema validation, dead-letter queues, CloudWatch observability and automated alerting.',
-        tags: ['AWS Lambda', 'S3', 'Glue', 'Terraform', 'Python'],
-        github: 'https://github.com/seeshuraj',
-        demo: null
-      },
-      {
-        title: 'Multi-Modal Biometric Auth',
-        desc: 'ACM 2023 published research. Fused fingerprint + face recognition pipeline using CNN + SVM ensemble. Achieved 97.4% accuracy on cross-dataset evaluation.',
-        tags: ['Python', 'PyTorch', 'OpenCV', 'SVM', 'Research'],
-        github: 'https://github.com/seeshuraj',
-        demo: null
-      },
-      {
-        title: 'Portfolio + Anime Avatar',
-        desc: 'This site. GSAP animations, Lenis smooth scroll, dark/light mode, AI avatar with Web Speech API STT, NVIDIA NIM LLM and Azure Neural TTS. Deployed on GitHub Pages.',
-        tags: ['HTML/CSS', 'GSAP', 'Lenis', 'Web Speech API', 'GitHub Pages'],
-        github: 'https://github.com/seeshuraj/Portfolio-Seeshuraj',
-        demo: 'https://seeshuraj.github.io/Portfolio-Seeshuraj/'
-      }
+      { title: 'LLM Test Lab', desc: 'Full-stack LLM evaluation platform. FastAPI backend, Next.js frontend, multi-model benchmarking with latency, accuracy and cost metrics. Supports OpenAI, Anthropic, local Ollama models.', tags: ['FastAPI', 'Next.js', 'Python', 'Supabase', 'Docker'], github: 'https://github.com/seeshuraj/llm-test-lab', demo: null },
+      { title: 'AI Anime Avatar API', desc: 'RAG-powered conversational avatar. NVIDIA NIM (DeepSeek-V3.1) for chat, Azure Neural TTS for voice, FastAPI backend deployed on Render. Answers questions about my CV in character.', tags: ['FastAPI', 'NVIDIA NIM', 'Azure TTS', 'RAG', 'Render'], github: 'https://github.com/seeshuraj/seeshuraj-avatar-api', demo: 'https://seeshuraj-avatar-api.onrender.com/docs' },
+      { title: 'HPC Benchmarking Suite', desc: 'CUDA + OpenMP + MPI performance benchmarking suite for Trinity HPC cluster. Automated result collection, Prometheus/Grafana dashboards, comparative analysis across parallelism models.', tags: ['CUDA', 'OpenMP', 'MPI', 'Python', 'Grafana'], github: 'https://github.com/seeshuraj', demo: null },
+      { title: 'Cloud ETL Pipeline', desc: 'Serverless ETL pipeline on AWS (Lambda, S3, Glue, RDS). Multi-source ingestion with schema validation, dead-letter queues, CloudWatch observability and automated alerting.', tags: ['AWS Lambda', 'S3', 'Glue', 'Terraform', 'Python'], github: 'https://github.com/seeshuraj', demo: null },
+      { title: 'Multi-Modal Biometric Auth', desc: 'ACM 2023 published research. Fused fingerprint + face recognition pipeline using CNN + SVM ensemble. Achieved 97.4% accuracy on cross-dataset evaluation.', tags: ['Python', 'PyTorch', 'OpenCV', 'SVM', 'Research'], github: 'https://github.com/seeshuraj', demo: null },
+      { title: 'Portfolio + Anime Avatar', desc: 'This site. GSAP animations, Lenis smooth scroll, dark/light mode, AI avatar with Web Speech API STT, NVIDIA NIM LLM and Azure Neural TTS. Deployed on GitHub Pages.', tags: ['HTML/CSS', 'GSAP', 'Lenis', 'Web Speech API', 'GitHub Pages'], github: 'https://github.com/seeshuraj/Portfolio-Seeshuraj', demo: 'https://seeshuraj.github.io/Portfolio-Seeshuraj/' }
     ];
-
     const grid = document.getElementById('projectsGrid');
     projects.forEach(p => {
       const card = document.createElement('div');
@@ -833,8 +850,7 @@
       `;
       grid.appendChild(card);
     });
-
-    // ── Certifications data ──────────────────────────
+    // ── Certifications data ───────────────────────────
     const certs = [
       { name: 'AWS Certified Solutions Architect — Associate', issuer: 'Amazon Web Services', year: '2024' },
       { name: 'Microsoft Azure Fundamentals (AZ-900)', issuer: 'Microsoft', year: '2024' },
@@ -848,9 +864,9 @@
       card.innerHTML = `<div class="cert-name">${c.name}</div><div class="cert-issuer">${c.issuer}</div><div class="cert-year">${c.year}</div>`;
       certsGrid.appendChild(card);
     });
-
-    // ── Lucide icons ─────────────────────────────────
+    // ── Lucide icons ──────────────────────────────────
     lucide.createIcons();
   </script>
+  <script src="./avatar.js" defer></script>
 </body>
 </html>
