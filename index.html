@@ -134,11 +134,16 @@
     .scroll-hint{position:absolute;bottom:var(--space-6);left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:var(--space-2);color:var(--color-text-faint);font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;z-index:2;}
     .scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--color-primary),transparent);animation:scroll-drop 2.2s ease-in-out infinite;}
     @keyframes scroll-drop{0%{transform:scaleY(0);transform-origin:top;opacity:0;}40%{transform:scaleY(1);transform-origin:top;opacity:1;}60%{transform:scaleY(1);transform-origin:bottom;opacity:1;}100%{transform:scaleY(0);transform-origin:bottom;opacity:0;}}
+
     /* Hero photo frame — pulse glow */
     .hero-photo-frame{position:relative;width:min(420px,92vw);aspect-ratio:4/5;border-radius:var(--radius-2xl);overflow:hidden;border:1px solid oklch(from var(--color-primary) l c h/0.25);box-shadow:0 0 64px var(--color-primary-glow);animation:frame-pulse 4s ease-in-out infinite;}
     @keyframes frame-pulse{0%,100%{box-shadow:0 0 40px var(--color-primary-glow);}50%{box-shadow:0 0 90px var(--color-primary-glow),0 0 140px color-mix(in oklch,var(--color-primary) 6%,transparent);}}
     .hero-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top center;}
     .hero-photo-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,color-mix(in oklch,var(--color-bg) 55%,transparent) 0%,transparent 55%);pointer-events:none;}
+
+    /* Hero SVG avatar placeholder */
+    .hero-avatar-svg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--color-surface-offset) 0%,color-mix(in oklch,var(--color-primary) 8%,var(--color-surface)) 100%);}
+    .hero-avatar-svg svg{width:62%;height:62%;color:var(--color-primary);opacity:0.55;}
 
     /* ABOUT */
     #about{padding:clamp(var(--space-8),5vw,var(--space-16)) clamp(var(--space-8),8vw,var(--space-24));background:var(--color-surface);}
@@ -254,19 +259,6 @@
       background:var(--color-primary-highlight);
       box-shadow:0 0 10px var(--color-primary-glow);
     }
-    /* Proficiency bar inside featured card */
-    .skill-bars{display:flex;flex-direction:column;gap:var(--space-2);margin-top:var(--space-1);}
-    .skill-bar-row{display:flex;align-items:center;gap:var(--space-3);}
-    .skill-bar-label{font-size:var(--text-xs);color:var(--color-text-muted);width:90px;flex-shrink:0;white-space:nowrap;}
-    .skill-bar-track{flex:1;height:4px;background:var(--color-surface-offset);border-radius:var(--radius-full);overflow:hidden;}
-    .skill-bar-fill{
-      height:100%;
-      background:linear-gradient(90deg,var(--color-primary),color-mix(in oklch,var(--color-primary) 60%,#fff));
-      border-radius:var(--radius-full);transform-origin:left;transform:scaleX(0);
-      transition:transform 0.9s cubic-bezier(0.16,1,0.3,1);
-      box-shadow:0 0 8px var(--color-primary-glow);
-    }
-    .skill-bar-fill.animated{transform:scaleX(1);}
     /* Marquee row at bottom */
     .skills-marquee-wrap{margin-top:var(--space-8);overflow:hidden;position:relative;}
     .skills-marquee-wrap::before,.skills-marquee-wrap::after{
@@ -324,11 +316,15 @@
     /* CERTIFICATIONS */
     #certifications{padding:clamp(var(--space-10),6vw,var(--space-20)) clamp(var(--space-8),8vw,var(--space-24));background:var(--color-bg);}
     .certs-inner{max-width:var(--content-wide);margin:0 auto;}
-    .certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:var(--space-4);margin-top:var(--space-8);}
-    .cert-card{padding:var(--space-5);border:1px solid oklch(from var(--color-text) l c h/0.08);border-radius:var(--radius-xl);background:var(--color-surface);display:flex;flex-direction:column;gap:var(--space-2);}
-    .cert-name{font-size:var(--text-sm);font-weight:700;color:var(--color-text);line-height:1.3;}
-    .cert-issuer{font-size:var(--text-xs);color:var(--color-primary);font-weight:500;}
-    .cert-year{font-size:var(--text-xs);color:var(--color-text-faint);}
+    .certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:var(--space-4);margin-top:var(--space-8);}
+    .cert-card{padding:var(--space-5);border:1px solid oklch(from var(--color-text) l c h/0.08);border-radius:var(--radius-xl);background:var(--color-surface);display:flex;flex-direction:column;gap:var(--space-2);transition:border-color var(--transition-interactive),box-shadow var(--transition-interactive),transform var(--transition-interactive);}
+    .cert-card:hover{border-color:oklch(from var(--color-primary) l c h/0.35);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+    .cert-icon{width:32px;height:32px;border-radius:var(--radius-md);background:var(--color-primary-highlight);display:flex;align-items:center;justify-content:center;color:var(--color-primary);margin-bottom:var(--space-1);}
+    .cert-name{font-size:var(--text-sm);font-weight:700;color:var(--color-text);line-height:1.35;}
+    .cert-issuer{font-size:var(--text-xs);color:var(--color-primary);font-weight:600;letter-spacing:0.03em;}
+    .cert-meta{display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-1);}
+    .cert-year{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:0.04em;}
+    .cert-id{font-size:var(--text-xs);color:var(--color-text-faint);font-family:monospace;letter-spacing:0.03em;}
 
     /* CONTACT */
     #contact{padding:clamp(var(--space-16),8vw,var(--space-32)) clamp(var(--space-8),8vw,var(--space-24));background:var(--color-surface);text-align:center;}
@@ -413,7 +409,7 @@
         <div class="hero-ctas" id="heroCtas">
           <a href="#projects" class="btn-primary">View projects</a>
           <a href="mailto:bhoopals@tcd.ie" class="btn-ghost">bhoopals@tcd.ie</a>
-          <a href="https://www.linkedin.com/in/seeshurajbhoopalan/" class="btn-ghost" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://www.linkedin.com/in/seeshuraj-b-051260122/" class="btn-ghost" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
         <div class="hero-stats" id="heroStats">
           <div class="stat"><span class="stat-number" data-count="2">0</span><span class="stat-label">Years exp.</span></div>
@@ -424,7 +420,21 @@
       </div>
       <div class="hero-right">
         <div class="hero-photo-frame">
-          <img src="./assets/hero-photo.jpg" alt="Seeshuraj Bhoopalan" width="420" height="525" loading="eager">
+          <!-- Avatar placeholder — replace src with your real photo (./assets/hero-photo.jpg) -->
+          <div class="hero-avatar-svg" aria-label="Seeshuraj Bhoopalan">
+            <svg viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Head -->
+              <ellipse cx="60" cy="42" rx="26" ry="28" fill="currentColor" opacity="0.18"/>
+              <!-- Neck -->
+              <rect x="52" y="68" width="16" height="14" rx="6" fill="currentColor" opacity="0.18"/>
+              <!-- Shoulders / body -->
+              <path d="M10 130 C10 95 30 82 60 82 C90 82 110 95 110 130" fill="currentColor" opacity="0.13"/>
+              <!-- Face detail lines -->
+              <ellipse cx="52" cy="40" rx="3.5" ry="4" fill="currentColor" opacity="0.35"/>
+              <ellipse cx="68" cy="40" rx="3.5" ry="4" fill="currentColor" opacity="0.35"/>
+              <path d="M52 56 Q60 62 68 56" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -497,7 +507,7 @@
       <!-- Bento grid -->
       <div class="skills-bento" id="skillsBento">
 
-        <!-- ML & LLMs — featured (spans 3 cols) -->
+        <!-- ML & LLMs — featured (spans 3 cols), pills only — no rating bars -->
         <div class="skill-card featured" data-cat="ml">
           <div style="display:flex;align-items:center;gap:var(--space-3);">
             <div class="skill-card-icon">
@@ -505,18 +515,21 @@
             </div>
             <span class="skill-card-title">ML &amp; LLMs</span>
           </div>
-          <div class="skill-bars" id="skillBars">
-            <div class="skill-bar-row"><span class="skill-bar-label">PyTorch</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.88" data-w="0.88"></div></div></div>
-            <div class="skill-bar-row"><span class="skill-bar-label">LangChain</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.85" data-w="0.85"></div></div></div>
-            <div class="skill-bar-row"><span class="skill-bar-label">RAG pipelines</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.90" data-w="0.90"></div></div></div>
-            <div class="skill-bar-row"><span class="skill-bar-label">OpenAI API</span><div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.92" data-w="0.92"></div></div></div>
-          </div>
           <div class="skill-pills">
-            <span class="s-pill">LangGraph</span>
-            <span class="s-pill">Ollama</span>
+            <span class="s-pill">PyTorch</span>
+            <span class="s-pill">TensorFlow</span>
             <span class="s-pill">Hugging Face</span>
-            <span class="s-pill">Bedrock</span>
+            <span class="s-pill">LangChain</span>
+            <span class="s-pill">LangGraph</span>
+            <span class="s-pill">RAG Pipelines</span>
+            <span class="s-pill">OpenAI API</span>
+            <span class="s-pill">Ollama</span>
+            <span class="s-pill">Amazon Bedrock</span>
             <span class="s-pill">NVIDIA NIM</span>
+            <span class="s-pill">Few-shot Prompting</span>
+            <span class="s-pill">Chain-of-Thought</span>
+            <span class="s-pill">Red-teaming</span>
+            <span class="s-pill">Fine-tuning</span>
           </div>
         </div>
 
@@ -702,7 +715,7 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           bhoopals@tcd.ie
         </a>
-        <a href="https://www.linkedin.com/in/seeshurajbhoopalan/" class="btn-outline" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.linkedin.com/in/seeshuraj-b-051260122/" class="btn-outline" target="_blank" rel="noopener noreferrer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
         </a>
@@ -771,14 +784,6 @@
       trigger: '#skillsBento', start: 'top 82%', once: true,
       onEnter: () => {
         gsap.from('.skill-card', { opacity: 0, y: 32, scale: 0.97, duration: 0.65, stagger: 0.08, ease: 'expo.out' });
-        document.querySelectorAll('.skill-bar-fill').forEach(bar => {
-          const w = parseFloat(bar.dataset.w);
-          bar.style.transform = 'scaleX(0)';
-          setTimeout(() => {
-            bar.style.transition = 'transform 0.9s cubic-bezier(0.16,1,0.3,1)';
-            bar.style.transform = `scaleX(${w})`;
-          }, 300);
-        });
       }
     });
     // Parallax hero bg
@@ -850,18 +855,35 @@
       `;
       grid.appendChild(card);
     });
-    // ── Certifications data ───────────────────────────
+    // ── Certifications data — sourced from resume ─────
     const certs = [
-      { name: 'AWS Certified Solutions Architect — Associate', issuer: 'Amazon Web Services', year: '2024' },
-      { name: 'Microsoft Azure Fundamentals (AZ-900)', issuer: 'Microsoft', year: '2024' },
-      { name: 'Deep Learning Specialization', issuer: 'DeepLearning.AI / Coursera', year: '2023' },
-      { name: 'Python for Data Science and AI', issuer: 'IBM / Coursera', year: '2022' },
+      { name: 'Claude with Amazon Bedrock', issuer: 'Anthropic', year: '2026', id: null, detail: 'RAG, tools, evals, extended thinking, prompt caching' },
+      { name: 'AI Fluency – Framework & Foundations', issuer: 'Anthropic', year: '2026', id: null, detail: '4D framework: Delegation, Description, Discernment, Diligence' },
+      { name: 'Microsoft Applied Skills: Create an AI Agent', issuer: 'Microsoft', year: 'Feb 2026', id: 'A41534D6AD963F5A', detail: null },
+      { name: 'Azure AI Vision', issuer: 'Microsoft Learn', year: 'Feb 2026', id: null, detail: 'Object Detection · Image Classification · Face Analysis · OCR' },
+      { name: 'Plan & Prepare AI Solutions on Azure', issuer: 'Microsoft Learn', year: '2026', id: null, detail: 'Generative AI & Agents · Power BI' },
+      { name: 'AWS Cloud & DevOps', issuer: 'Amazon Web Services', year: '2023', id: null, detail: null },
+      { name: 'HPC Programming: CUDA & OpenMP', issuer: 'Professional Training', year: '2023', id: null, detail: null },
+      { name: 'Full Stack Java Development', issuer: 'Professional Training', year: '2023', id: null, detail: null },
+      { name: 'MySQL', issuer: 'Professional Training', year: '2022', id: null, detail: null },
+      { name: 'Ethical Hacking', issuer: 'Professional Training', year: '2021', id: null, detail: null },
     ];
     const certsGrid = document.getElementById('certsGrid');
     certs.forEach(c => {
       const card = document.createElement('div');
       card.className = 'cert-card';
-      card.innerHTML = `<div class="cert-name">${c.name}</div><div class="cert-issuer">${c.issuer}</div><div class="cert-year">${c.year}</div>`;
+      card.innerHTML = `
+        <div class="cert-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </div>
+        <div class="cert-name">${c.name}</div>
+        <div class="cert-issuer">${c.issuer}</div>
+        ${c.detail ? `<div class="cert-year" style="color:var(--color-text-muted);font-size:var(--text-xs);line-height:1.5;">${c.detail}</div>` : ''}
+        <div class="cert-meta">
+          <span class="cert-year">${c.year}</span>
+          ${c.id ? `<span class="cert-id">ID: ${c.id}</span>` : ''}
+        </div>
+      `;
       certsGrid.appendChild(card);
     });
     // ── Lucide icons ──────────────────────────────────
