@@ -1,131 +1,162 @@
-/* ═══ ANIME AVATAR CHAT WIDGET ═══ */
+/* ═══ ANIME AVATAR WIDGET — v2 (animated states) ═══ */
 
-/* ── Avatar states ── */
-.anime-avatar {
-  transition: transform 180ms cubic-bezier(0.16,1,0.3,1), filter 180ms cubic-bezier(0.16,1,0.3,1);
-  transform-origin: center bottom;
-}
-
-/* idle: gentle float */
-.avatar-state-idle .anime-avatar {
-  animation: avatar-float 4s ease-in-out infinite;
-}
-@keyframes avatar-float {
-  0%,100% { transform: translateY(0) scale(1); }
-  50%     { transform: translateY(-6px) scale(1.01); }
-}
-
-/* listening: soft pulse ring on the wrap */
-.avatar-state-listening .anime-avatar {
-  animation: avatar-listen 1.2s ease-in-out infinite;
-  filter: brightness(1.07) saturate(1.15);
-}
-@keyframes avatar-listen {
-  0%,100% { transform: scale(1); }
-  50%     { transform: scale(1.025); }
-}
-.avatar-state-listening .anime-wrap::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
-  border: 2px solid var(--color-primary);
-  animation: ring-pulse 1.2s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes ring-pulse {
-  0%,100% { opacity: 0.9; transform: scale(1);    }
-  50%     { opacity: 0.2; transform: scale(1.04);  }
-}
-
-/* thinking: subtle wobble */
-.avatar-state-thinking .anime-avatar {
-  animation: avatar-think 0.8s ease-in-out infinite alternate;
-}
-@keyframes avatar-think {
-  from { transform: rotate(-1.5deg) scale(0.99); }
-  to   { transform: rotate( 1.5deg) scale(1.01); }
-}
-
-/* speaking: happy bounce */
-.avatar-state-speaking .anime-avatar {
-  animation: avatar-speak 0.55s ease-in-out infinite alternate;
-  filter: brightness(1.05) saturate(1.1);
-}
-@keyframes avatar-speak {
-  from { transform: translateY(0)   scaleY(1);    }
-  to   { transform: translateY(-5px) scaleY(0.98); }
-}
-
-/* ── Speech bubble ── */
+/* ── Speech bubble ───────────────────────────────────────────────────────── */
 .avatar-bubble {
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 12px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(6px);
   min-width: 200px;
-  max-width: min(300px, 88vw);
-  background: var(--color-surface-2);
-  border: 1px solid oklch(from var(--color-primary) l c h / 0.45);
-  border-radius: var(--radius-xl);
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-xs);
-  color: var(--color-text);
-  line-height: 1.55;
-  box-shadow: var(--shadow-lg), 0 0 24px var(--color-primary-glow);
-  z-index: 10;
+  max-width: min(320px, 90vw);
+  background: var(--color-surface-2, #1c1b19);
+  border: 1px solid oklch(from var(--color-primary, #00d4e0) l c h / 0.35);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text, #e8e6e2);
+  box-shadow: 0 8px 32px oklch(0 0 0 / 0.35), 0 0 24px oklch(from var(--color-primary, #00d4e0) l c h / 0.12);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 280ms ease, transform 280ms cubic-bezier(0.16,1,0.3,1);
-  transform: translateX(-50%) translateY(8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+  z-index: 20;
   text-align: left;
   word-break: break-word;
 }
-.avatar-bubble.visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-/* tail */
+
 .avatar-bubble::after {
   content: '';
   position: absolute;
-  top: 100%; left: 50%;
+  top: 100%;
+  left: 50%;
   transform: translateX(-50%);
-  border: 8px solid transparent;
-  border-top-color: var(--color-surface-2);
-  filter: drop-shadow(0 2px 2px oklch(0 0 0 / 0.12));
+  border: 7px solid transparent;
+  border-top-color: var(--color-surface-2, #1c1b19);
 }
 
-/* ── Mic permission note ── */
-.avatar-mic-note {
-  font-size: var(--text-xs);
-  color: var(--color-text-faint);
-  margin-top: var(--space-1);
-  text-align: center;
+.avatar-bubble.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
 }
 
-/* ── Talk button active state ── */
-#animeTalkBtn.active {
-  background: var(--color-primary);
-  color: var(--color-text-inverse);
-  border-color: var(--color-primary);
-  box-shadow: 0 0 18px var(--color-primary-glow);
+/* ── Thinking dots ───────────────────────────────────────────────────────── */
+.thinking-dots {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  padding: 2px 0;
 }
-[data-theme='light'] #animeTalkBtn.active { color: #fff; }
 
-/* ── Thinking dots ── */
 .thinking-dots span {
   display: inline-block;
-  width: 5px; height: 5px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--color-primary);
-  margin: 0 2px;
-  animation: dot-bounce 1.1s ease-in-out infinite;
+  background: var(--color-primary, #00d4e0);
+  opacity: 0.3;
+  animation: td-pulse 1.2s ease-in-out infinite;
 }
-.thinking-dots span:nth-child(2) { animation-delay: 0.18s; }
-.thinking-dots span:nth-child(3) { animation-delay: 0.36s; }
-@keyframes dot-bounce {
-  0%,80%,100% { transform: scale(0.7); opacity: 0.4; }
-  40%         { transform: scale(1);   opacity: 1;   }
+
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes td-pulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.75); }
+  50%       { opacity: 1;   transform: scale(1.1); }
+}
+
+/* ── Base avatar animation: idle float ───────────────────────────────────── */
+.anime-avatar {
+  animation: avatar-float 4s ease-in-out infinite;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+@keyframes avatar-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-6px) rotate(0.4deg); }
+  66%       { transform: translateY(-3px) rotate(-0.3deg); }
+}
+
+/* ── State: listening — pulse ring on the wrap ───────────────────────────── */
+.anime-wrap.avatar-state-listening .anime-avatar {
+  animation: avatar-listen 1.5s ease-in-out infinite;
+}
+
+@keyframes avatar-listen {
+  0%, 100% { transform: scale(1.00) translateY(0); }
+  50%       { transform: scale(1.02) translateY(-4px); }
+}
+
+.anime-wrap.avatar-state-listening::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 2px solid var(--color-primary, #00d4e0);
+  opacity: 0;
+  animation: listen-ring 1.4s ease-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+
+@keyframes listen-ring {
+  0%   { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.06); }
+}
+
+/* ── State: thinking — gentle wobble ─────────────────────────────────────── */
+.anime-wrap.avatar-state-thinking .anime-avatar {
+  animation: avatar-think 0.9s ease-in-out infinite;
+}
+
+@keyframes avatar-think {
+  0%, 100% { transform: rotate(-1.2deg) translateY(0); }
+  50%       { transform: rotate(1.2deg) translateY(-3px); }
+}
+
+/* ── State: speaking — bob up and down ───────────────────────────────────── */
+.anime-wrap.avatar-state-speaking .anime-avatar {
+  animation: avatar-speak 0.55s ease-in-out infinite alternate;
+}
+
+@keyframes avatar-speak {
+  from { transform: translateY(0)   scaleY(1.000); }
+  to   { transform: translateY(-8px) scaleY(0.995); }
+}
+
+.anime-wrap.avatar-state-speaking {
+  box-shadow: 0 0 0 2px var(--color-primary, #00d4e0),
+              0 0 32px oklch(from var(--color-primary, #00d4e0) l c h / 0.3);
+  transition: box-shadow 200ms ease;
+}
+
+/* ── Mic note ────────────────────────────────────────────────────────────── */
+#avatarMicNote {
+  font-size: 0.7rem;
+  color: var(--color-text-faint, #4a4946);
+  min-height: 1em;
+  font-style: italic;
+}
+
+/* ── Talk button active state ────────────────────────────────────────────── */
+.btn-anime-talk.active {
+  background: var(--color-primary-highlight, #0d2a2e);
+  border-color: var(--color-primary, #00d4e0);
+  box-shadow: 0 0 18px oklch(from var(--color-primary, #00d4e0) l c h / 0.35);
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .anime-avatar,
+  .anime-wrap.avatar-state-listening .anime-avatar,
+  .anime-wrap.avatar-state-thinking .anime-avatar,
+  .anime-wrap.avatar-state-speaking .anime-avatar {
+    animation: none;
+  }
+  .anime-wrap.avatar-state-listening::before {
+    animation: none;
+    opacity: 0.5;
+  }
 }

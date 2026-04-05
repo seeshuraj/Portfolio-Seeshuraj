@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: seeshuraj-avatar-api
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: XAI_API_KEY
+        sync: false
+      - key: SPEECH_KEY
+        sync: false
+      - key: SPEECH_REGION
+        value: westeurope
+      - key: SPEECH_VOICE
+        value: en-US-AriaNeural
+      - key: ALLOWED_ORIGINS
+        value: '["https://seeshuraj.github.io"]'
