@@ -177,7 +177,8 @@
        SKILLS — uniform card sizing
     ═══════════════════════════════════════════ */
     #skills-section{
-      padding: clamp(var(--space-8),5vw,var(--space-16)) clamp(var(--space-6),4vw,var(--space-12));
+      /* horizontal padding now matches other sections (space-8 → space-24) */
+      padding: clamp(var(--space-8),5vw,var(--space-16)) clamp(var(--space-8),8vw,var(--space-24));
       background: var(--color-bg);
       position: relative;
       overflow: hidden;
@@ -188,13 +189,23 @@
       pointer-events:none;
     }
     .skills-inner{max-width:100%;margin:0 auto;position:relative;}
-    .skills-header{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-4);flex-wrap:wrap;}
+    .skills-header{
+      display:flex;align-items:flex-end;justify-content:space-between;
+      gap:var(--space-4);
+      /* increased from space-4 → space-6 for comfortable breathing room */
+      margin-bottom:var(--space-6);
+      flex-wrap:wrap;
+    }
     .skills-heading{
       font-family:var(--font-display);font-size:var(--text-2xl);font-weight:800;letter-spacing:-0.03em;color:var(--color-text);
       text-shadow:0 0 40px color-mix(in oklch,var(--color-primary) 20%,transparent);
     }
     .skills-count{font-size:var(--text-xs);color:var(--color-text-faint);letter-spacing:0.06em;text-transform:uppercase;padding-bottom:4px;}
-    .skills-tabs{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-4);}
+    .skills-tabs{
+      display:flex;flex-wrap:wrap;gap:var(--space-2);
+      /* increased from space-4 → space-6 so tabs breathe before the bento grid */
+      margin-bottom:var(--space-6);
+    }
     .skills-tab{padding:var(--space-1) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid oklch(from var(--color-text) l c h/0.12);color:var(--color-text-faint);background:transparent;cursor:pointer;transition:all var(--transition-interactive);}
     .skills-tab:hover{border-color:oklch(from var(--color-primary) l c h/0.4);color:var(--color-primary);}
     .skills-tab.active{background:var(--color-primary-highlight);border-color:oklch(from var(--color-primary) l c h/0.5);color:var(--color-primary);}
@@ -203,9 +214,9 @@
     .skills-bento{
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      /* stretch makes every cell fill the row height equally */
       align-items: stretch;
-      gap: var(--space-3);
+      /* increased from space-3 → space-4 for cleaner card separation */
+      gap: var(--space-4);
     }
     @media(max-width:1280px){.skills-bento{grid-template-columns:repeat(3,1fr);}}
     @media(max-width:900px){.skills-bento{grid-template-columns:repeat(2,1fr);}}
@@ -251,10 +262,8 @@
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      /* cap pill area height so ML & LLMs doesn't blow out the row */
       max-height: 148px;
       overflow-y: auto;
-      /* subtle scrollbar styling */
       scrollbar-width: thin;
       scrollbar-color: oklch(from var(--color-primary) l c h/0.3) transparent;
     }
@@ -269,7 +278,6 @@
     }
 
     .s-pill{
-      /* identical padding on every pill */
       padding: 4px var(--space-3);
       border: 1px solid oklch(from var(--color-text) l c h/0.10);
       border-radius: var(--radius-full);
