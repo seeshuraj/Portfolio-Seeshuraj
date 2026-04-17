@@ -11,7 +11,7 @@
   'use strict';
 
   // -- Config ---------------------------------------------------------------
-  const API_URL = (window.__AVATAR_API_URL || 'https://seeshuraj-avatar-api.onrender.com')
+  const API_URL = (window.__AVATAR_API_URL || 'https://seeshuraj-avatar-api.fly.dev/')
     .replace(/\/$/, '');
   const MAX_HISTORY = 6; // turns to keep in memory
 
